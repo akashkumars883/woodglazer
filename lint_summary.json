@@ -1,0 +1,335 @@
+[
+  {
+    "file": "app\\admin\\services\\[slug]\\sub-services\\page.tsx",
+    "errors": 5,
+    "warnings": 8,
+    "total": 13,
+    "messages": [
+      "29:44 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type.",
+      "30:50 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type.",
+      "44:48 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type.",
+      "45:10 - @typescript-eslint/no-unused-vars - 'newGalleryImage' is assigned a value but never used.",
+      "45:27 - @typescript-eslint/no-unused-vars - 'setNewGalleryImage' is assigned a value but never used.",
+      "48:5 - react-hooks/immutability - Error: Cannot access variable before it is declared\n\n`fetchData` is accessed before it is declared, which prevents the earlier access from updating when this value changes over time.\n\nD:\\Full Stack Dev\\wood-glazer\\app\\admin\\services\\[slug]\\sub-services\\page.tsx:48:5\n  46 |\n  47 |   useEffect(() => {\n> 48 |     fetchData();\n     |     ^^^^^^^^^ `fetchData` accessed before it is declared\n  49 |   }, [parentSlug]);\n  50 |\n  51 |   const fetchData = async () => {\n\nD:\\Full Stack Dev\\wood-glazer\\app\\admin\\services\\[slug]\\sub-services\\page.tsx:51:3\n  49 |   }, [parentSlug]);\n  50 |\n> 51 |   const fetchData = async () => {\n     |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n> 52 |     const { data: catData } = await supabase\n     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n> 53 |       .from(\"service_categories\")\n     ΓÇª\n     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n> 64 |     setLoading(false);\n     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n> 65 |   };\n     | ^^^^^ `fetchData` is declared here\n  66 |\n  67 |   const handleAddSub = async (e: React.FormEvent) => {\n  68 |     e.preventDefault();",
+      "49:6 - react-hooks/exhaustive-deps - React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array.",
+      "101:17 - @typescript-eslint/no-unused-vars - 'created_at' is assigned a value but never used.",
+      "101:29 - @typescript-eslint/no-unused-vars - 'parent_id' is assigned a value but never used.",
+      "289:33 - @next/next/no-img-element - Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element",
+      "289:33 - jsx-a11y/alt-text - img elements must have an alt prop, either with meaningful text, or an empty string for decorative images.",
+      "292:120 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type.",
+      "358:25 - @next/next/no-img-element - Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element"
+    ]
+  },
+  {
+    "file": "app\\admin\\actions.ts",
+    "errors": 10,
+    "warnings": 0,
+    "total": 10,
+    "messages": [
+      "87:19 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type.",
+      "111:42 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type.",
+      "140:56 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type.",
+      "177:67 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type.",
+      "206:81 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type.",
+      "236:49 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type.",
+      "237:30 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type.",
+      "244:61 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type.",
+      "272:17 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type.",
+      "318:19 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type."
+    ]
+  },
+  {
+    "file": "app\\admin\\leads\\page.tsx",
+    "errors": 4,
+    "warnings": 4,
+    "total": 8,
+    "messages": [
+      "9:3 - @typescript-eslint/no-unused-vars - 'Calendar' is defined but never used.",
+      "12:3 - @typescript-eslint/no-unused-vars - 'ExternalLink' is defined but never used.",
+      "13:3 - @typescript-eslint/no-unused-vars - 'Mail' is defined but never used.",
+      "17:8 - @typescript-eslint/no-unused-vars - 'Link' is defined but never used.",
+      "22:46 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type.",
+      "26:5 - react-hooks/immutability - Error: Cannot access variable before it is declared\n\n`fetchLeads` is accessed before it is declared, which prevents the earlier access from updating when this value changes over time.\n\nD:\\Full Stack Dev\\wood-glazer\\app\\admin\\leads\\page.tsx:26:5\n  24 |\n  25 |   useEffect(() => {\n> 26 |     fetchLeads();\n     |     ^^^^^^^^^^ `fetchLeads` accessed before it is declared\n  27 |   }, []);\n  28 |\n  29 |   const fetchLeads = async () => {\n\nD:\\Full Stack Dev\\wood-glazer\\app\\admin\\leads\\page.tsx:29:3\n  27 |   }, []);\n  28 |\n> 29 |   const fetchLeads = async () => {\n     |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n> 30 |     const result = await getInquiries();\n     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n> 31 |     if (result.success) {\n     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n> 32 |       setInquiries(result.inquiries || []);\n     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n> 33 |     }\n     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n> 34 |     setLoading(false);\n     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n> 35 |   };\n     | ^^^^^ `fetchLeads` is declared here\n  36 |\n  37 |   const handleMarkViewed = async (id: string) => {\n  38 |     setUpdating(id);",
+      "172:23 - react/no-unescaped-entities - `\"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`.",
+      "172:64 - react/no-unescaped-entities - `\"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`."
+    ]
+  },
+  {
+    "file": "app\\admin\\services\\[slug]\\edit\\page.tsx",
+    "errors": 3,
+    "warnings": 5,
+    "total": 8,
+    "messages": [
+      "32:5 - react-hooks/immutability - Error: Cannot access variable before it is declared\n\n`fetchCategory` is accessed before it is declared, which prevents the earlier access from updating when this value changes over time.\n\nD:\\Full Stack Dev\\wood-glazer\\app\\admin\\services\\[slug]\\edit\\page.tsx:32:5\n  30 |\n  31 |   useEffect(() => {\n> 32 |     fetchCategory();\n     |     ^^^^^^^^^^^^^ `fetchCategory` accessed before it is declared\n  33 |   }, [slug]);\n  34 |\n  35 |   const fetchCategory = async () => {\n\nD:\\Full Stack Dev\\wood-glazer\\app\\admin\\services\\[slug]\\edit\\page.tsx:35:3\n  33 |   }, [slug]);\n  34 |\n> 35 |   const fetchCategory = async () => {\n     |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n> 36 |     const { data, error } = await supabase\n     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n> 37 |       .from(\"service_categories\")\n     ΓÇª\n     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n> 47 |     setLoading(false);\n     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n> 48 |   };\n     | ^^^^^ `fetchCategory` is declared here\n  49 |\n  50 |   const handleSubmit = async (e: React.FormEvent) => {\n  51 |     e.preventDefault();",
+      "33:6 - react-hooks/exhaustive-deps - React Hook useEffect has a missing dependency: 'fetchCategory'. Either include it or remove the dependency array.",
+      "36:19 - @typescript-eslint/no-unused-vars - 'error' is assigned a value but never used.",
+      "101:118 - react/no-unescaped-entities - `\"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`.",
+      "101:135 - react/no-unescaped-entities - `\"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`.",
+      "105:17 - @next/next/no-img-element - Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element",
+      "167:22 - @next/next/no-img-element - Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element",
+      "167:22 - jsx-a11y/alt-text - img elements must have an alt prop, either with meaningful text, or an empty string for decorative images."
+    ]
+  },
+  {
+    "file": "app\\services\\[parent]\\[service]\\page.tsx",
+    "errors": 3,
+    "warnings": 4,
+    "total": 7,
+    "messages": [
+      "27:40 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type.",
+      "36:11 - @typescript-eslint/no-unused-vars - 'parent' is assigned a value but never used.",
+      "70:11 - @typescript-eslint/no-unused-vars - 'parent' is assigned a value but never used.",
+      "113:15 - @next/next/no-img-element - Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element",
+      "121:15 - @next/next/no-img-element - Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element",
+      "208:30 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type.",
+      "210:27 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type."
+    ]
+  },
+  {
+    "file": "app\\admin\\blog\\[slug]\\edit\\page.tsx",
+    "errors": 3,
+    "warnings": 3,
+    "total": 6,
+    "messages": [
+      "14:3 - @typescript-eslint/no-unused-vars - 'Plus' is defined but never used.",
+      "48:6 - react-hooks/exhaustive-deps - React Hook useEffect has a missing dependency: 'fetchPost'. Either include it or remove the dependency array.",
+      "99:19 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type.",
+      "142:105 - react/no-unescaped-entities - `\"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`.",
+      "142:113 - react/no-unescaped-entities - `\"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`.",
+      "281:27 - @next/next/no-img-element - Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element"
+    ]
+  },
+  {
+    "file": "app\\admin\\settings\\page.tsx",
+    "errors": 3,
+    "warnings": 2,
+    "total": 5,
+    "messages": [
+      "5:3 - @typescript-eslint/no-unused-vars - 'Save' is defined but never used.",
+      "39:5 - react-hooks/immutability - Error: Cannot access variable before it is declared\n\n`fetchSettings` is accessed before it is declared, which prevents the earlier access from updating when this value changes over time.\n\nD:\\Full Stack Dev\\wood-glazer\\app\\admin\\settings\\page.tsx:39:5\n  37 |\n  38 |   useEffect(() => {\n> 39 |     fetchSettings();\n     |     ^^^^^^^^^^^^^ `fetchSettings` accessed before it is declared\n  40 |   }, []);\n  41 |\n  42 |   const fetchSettings = async () => {\n\nD:\\Full Stack Dev\\wood-glazer\\app\\admin\\settings\\page.tsx:42:3\n  40 |   }, []);\n  41 |\n> 42 |   const fetchSettings = async () => {\n     |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n> 43 |     const result = await getSiteSettings();\n     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n> 44 |     if (result.success && result.settings && Object.keys(result.settings).length > 0) {\n     ΓÇª\n     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n> 53 |     setLoading(false);\n     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n> 54 |   };\n     | ^^^^^ `fetchSettings` is declared here\n  55 |\n  56 |   const handleSync = async () => {\n  57 |     setSaving(\"sync\");",
+      "40:6 - react-hooks/exhaustive-deps - React Hook useEffect has a missing dependency: 'fetchSettings'. Either include it or remove the dependency array.",
+      "68:49 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type.",
+      "113:96 - react/no-unescaped-entities - `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`."
+    ]
+  },
+  {
+    "file": "lib\\seo.ts",
+    "errors": 4,
+    "warnings": 1,
+    "total": 5,
+    "messages": [
+      "134:3 - @typescript-eslint/no-unused-vars - 'config' is assigned a value but never used.",
+      "186:28 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type.",
+      "193:60 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type.",
+      "193:102 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type.",
+      "226:28 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type."
+    ]
+  },
+  {
+    "file": "app\\admin\\blog\\page.tsx",
+    "errors": 2,
+    "warnings": 2,
+    "total": 4,
+    "messages": [
+      "18:38 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type.",
+      "22:5 - react-hooks/immutability - Error: Cannot access variable before it is declared\n\n`fetchBlogs` is accessed before it is declared, which prevents the earlier access from updating when this value changes over time.\n\nD:\\Full Stack Dev\\wood-glazer\\app\\admin\\blog\\page.tsx:22:5\n  20 |\n  21 |   useEffect(() => {\n> 22 |     fetchBlogs();\n     |     ^^^^^^^^^^ `fetchBlogs` accessed before it is declared\n  23 |   }, []);\n  24 |\n  25 |   const fetchBlogs = async () => {\n\nD:\\Full Stack Dev\\wood-glazer\\app\\admin\\blog\\page.tsx:25:3\n  23 |   }, []);\n  24 |\n> 25 |   const fetchBlogs = async () => {\n     |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n> 26 |     setLoading(true);\n     | ^^^^^^^^^^^^^^^^^^^^^\n> 27 |     const { data, error } = await supabase\n     | ^^^^^^^^^^^^^^^^^^^^^\n> 28 |       .from(\"blog_posts\")\n     | ^^^^^^^^^^^^^^^^^^^^^\n> 29 |       .select(\"*\")\n     | ^^^^^^^^^^^^^^^^^^^^^\n> 30 |       .order(\"created_at\", { ascending: false });\n     | ^^^^^^^^^^^^^^^^^^^^^\n> 31 |     \n     | ^^^^^^^^^^^^^^^^^^^^^\n> 32 |     if (data) setBlogs(data);\n     | ^^^^^^^^^^^^^^^^^^^^^\n> 33 |     setLoading(false);\n     | ^^^^^^^^^^^^^^^^^^^^^\n> 34 |   };\n     | ^^^^^ `fetchBlogs` is declared here\n  35 |\n  36 |   const handleDelete = async (id: string, title: string) => {\n  37 |     if (window.confirm(`Are you sure you want to delete \"${title}\"? This action cannot be undone.`)) {",
+      "27:19 - @typescript-eslint/no-unused-vars - 'error' is assigned a value but never used.",
+      "112:40 - @next/next/no-img-element - Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element"
+    ]
+  },
+  {
+    "file": "app\\admin\\page.tsx",
+    "errors": 4,
+    "warnings": 0,
+    "total": 4,
+    "messages": [
+      "45:79 - react/no-unescaped-entities - `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`.",
+      "45:86 - react/no-unescaped-entities - `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`.",
+      "119:19 - react/no-unescaped-entities - `\"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`.",
+      "119:112 - react/no-unescaped-entities - `\"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`."
+    ]
+  },
+  {
+    "file": "app\\admin\\services\\page.tsx",
+    "errors": 2,
+    "warnings": 2,
+    "total": 4,
+    "messages": [
+      "17:48 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type.",
+      "21:5 - react-hooks/immutability - Error: Cannot access variable before it is declared\n\n`fetchCategories` is accessed before it is declared, which prevents the earlier access from updating when this value changes over time.\n\nD:\\Full Stack Dev\\wood-glazer\\app\\admin\\services\\page.tsx:21:5\n  19 |\n  20 |   useEffect(() => {\n> 21 |     fetchCategories();\n     |     ^^^^^^^^^^^^^^^ `fetchCategories` accessed before it is declared\n  22 |   }, []);\n  23 |\n  24 |   const fetchCategories = async () => {\n\nD:\\Full Stack Dev\\wood-glazer\\app\\admin\\services\\page.tsx:24:3\n  22 |   }, []);\n  23 |\n> 24 |   const fetchCategories = async () => {\n     |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n> 25 |     setLoading(true);\n     | ^^^^^^^^^^^^^^^^^^^^^\n> 26 |     const { data, error } = await supabase\n     | ^^^^^^^^^^^^^^^^^^^^^\n> 27 |       .from(\"service_categories\")\n     | ^^^^^^^^^^^^^^^^^^^^^\n> 28 |       .select(\"*, sub_services(count)\")\n     | ^^^^^^^^^^^^^^^^^^^^^\n> 29 |       .order(\"created_at\", { ascending: true });\n     | ^^^^^^^^^^^^^^^^^^^^^\n> 30 |     \n     | ^^^^^^^^^^^^^^^^^^^^^\n> 31 |     if (data) setCategories(data);\n     | ^^^^^^^^^^^^^^^^^^^^^\n> 32 |     setLoading(false);\n     | ^^^^^^^^^^^^^^^^^^^^^\n> 33 |   };\n     | ^^^^^ `fetchCategories` is declared here\n  34 |\n  35 |   const handleDelete = async (id: string, title: string) => {\n  36 |     if (window.confirm(`Are you sure you want to delete the \"${title}\" category? All sub-services will also be removed.`)) {",
+      "26:19 - @typescript-eslint/no-unused-vars - 'error' is assigned a value but never used.",
+      "71:25 - @next/next/no-img-element - Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element"
+    ]
+  },
+  {
+    "file": "app\\services\\[parent]\\page.tsx",
+    "errors": 2,
+    "warnings": 2,
+    "total": 4,
+    "messages": [
+      "55:65 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type.",
+      "103:15 - @next/next/no-img-element - Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element",
+      "111:15 - @next/next/no-img-element - Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element",
+      "150:61 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type."
+    ]
+  },
+  {
+    "file": "app\\admin\\layout.tsx",
+    "errors": 0,
+    "warnings": 3,
+    "total": 3,
+    "messages": [
+      "11:3 - @typescript-eslint/no-unused-vars - 'X' is defined but never used.",
+      "38:10 - @typescript-eslint/no-unused-vars - 'isSidebarOpen' is assigned a value but never used.",
+      "38:25 - @typescript-eslint/no-unused-vars - 'setIsSidebarOpen' is assigned a value but never used."
+    ]
+  },
+  {
+    "file": "app\\blog\\[slug]\\page.tsx",
+    "errors": 2,
+    "warnings": 1,
+    "total": 3,
+    "messages": [
+      "4:8 - @typescript-eslint/no-unused-vars - 'Link' is defined but never used.",
+      "63:36 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type.",
+      "142:17 - @typescript-eslint/ban-ts-comment - Use \"@ts-expect-error\" instead of \"@ts-ignore\", as \"@ts-ignore\" will do nothing if the following line is error-free."
+    ]
+  },
+  {
+    "file": "app\\blog\\page.tsx",
+    "errors": 3,
+    "warnings": 0,
+    "total": 3,
+    "messages": [
+      "28:43 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type.",
+      "37:44 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type.",
+      "118:36 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type."
+    ]
+  },
+  {
+    "file": "components\\Services.tsx",
+    "errors": 2,
+    "warnings": 1,
+    "total": 3,
+    "messages": [
+      "48:48 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type.",
+      "53:21 - @typescript-eslint/no-unused-vars - 'error' is assigned a value but never used.",
+      "110:65 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type."
+    ]
+  },
+  {
+    "file": "lib\\database.types.ts",
+    "errors": 3,
+    "warnings": 0,
+    "total": 3,
+    "messages": [
+      "110:20 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type.",
+      "115:20 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type.",
+      "120:21 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type."
+    ]
+  },
+  {
+    "file": "app\\admin\\blog\\new\\page.tsx",
+    "errors": 1,
+    "warnings": 1,
+    "total": 2,
+    "messages": [
+      "72:19 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type.",
+      "244:27 - @next/next/no-img-element - Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element"
+    ]
+  },
+  {
+    "file": "app\\admin\\login\\page.tsx",
+    "errors": 1,
+    "warnings": 1,
+    "total": 2,
+    "messages": [
+      "27:14 - @typescript-eslint/no-unused-vars - 'err' is defined but never used.",
+      "27:19 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type."
+    ]
+  },
+  {
+    "file": "app\\admin\\services\\seed\\page.tsx",
+    "errors": 2,
+    "warnings": 0,
+    "total": 2,
+    "messages": [
+      "25:19 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type.",
+      "109:30 - react/no-unescaped-entities - `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`."
+    ]
+  },
+  {
+    "file": "components\\admin\\TipTapEditor.tsx",
+    "errors": 1,
+    "warnings": 1,
+    "total": 2,
+    "messages": [
+      "28:3 - @typescript-eslint/no-unused-vars - 'AlignJustify' is defined but never used.",
+      "32:40 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type."
+    ]
+  },
+  {
+    "file": "tmp\\check_db.js",
+    "errors": 2,
+    "warnings": 0,
+    "total": 2,
+    "messages": [
+      "1:26 - @typescript-eslint/no-require-imports - A `require()` style import is forbidden.",
+      "2:1 - @typescript-eslint/no-require-imports - A `require()` style import is forbidden."
+    ]
+  },
+  {
+    "file": "app\\admin\\actions\\migrate.ts",
+    "errors": 1,
+    "warnings": 0,
+    "total": 1,
+    "messages": [
+      "86:19 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type."
+    ]
+  },
+  {
+    "file": "app\\admin\\migrate\\page.tsx",
+    "errors": 1,
+    "warnings": 0,
+    "total": 1,
+    "messages": [
+      "25:19 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type."
+    ]
+  },
+  {
+    "file": "app\\contact\\page.tsx",
+    "errors": 1,
+    "warnings": 0,
+    "total": 1,
+    "messages": [
+      "29:39 - react/no-unescaped-entities - `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`."
+    ]
+  },
+  {
+    "file": "app\\services\\page.tsx",
+    "errors": 1,
+    "warnings": 0,
+    "total": 1,
+    "messages": [
+      "73:38 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type."
+    ]
+  },
+  {
+    "file": "app\\sitemap.ts",
+    "errors": 1,
+    "warnings": 0,
+    "total": 1,
+    "messages": [
+      "44:76 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type."
+    ]
+  },
+  {
+    "file": "lib\\site.ts",
+    "errors": 1,
+    "warnings": 0,
+    "total": 1,
+    "messages": [
+      "32:49 - @typescript-eslint/no-explicit-any - Unexpected any. Specify a different type."
+    ]
+  }
+]

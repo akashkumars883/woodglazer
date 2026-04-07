@@ -1,0 +1,73 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+:root {
+  --background: #ffffff;
+  --foreground: #341512;
+  --surface: #fffcf7;
+  --muted: #8c6643;
+  --border: rgba(83, 24, 17, 0.14);
+  --primary: #955f0e;
+  --primary-foreground: #fff8ef;
+  --secondary: #5a120f;
+  --secondary-foreground: #fff7f0;
+  --accent: #ead7b8;
+  --ring: rgba(197, 133, 36, 0.24);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-ring: var(--ring);
+  --font-sans: var(--font-outfit);
+  --font-display: var(--font-outfit);
+}
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  background: var(--background);
+  scroll-behavior: smooth;
+  scroll-padding-top: 6.5rem;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-outfit), sans-serif;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgba(197, 133, 36, 0.22);
+}
+
+a,
+button {
+  outline-color: var(--ring);
+}
+
+.service-outline-title {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--secondary);
+  transition:
+    color 180ms ease,
+    -webkit-text-stroke-color 180ms ease;
+}
+
+.service-outline-title:hover,
+.group:hover .service-outline-title {
+  color: var(--secondary);
+  -webkit-text-stroke-color: transparent;
+}
