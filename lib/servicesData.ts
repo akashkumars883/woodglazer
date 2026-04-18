@@ -142,6 +142,47 @@ export const servicesData: ServiceCategory[] = [
       },
     ],
   },
+
+// wallpaper and interior panels
+
+  {
+    slug: "wallpaper-and-interior-panels",
+    title: "Wallpaper & Interior Panels",
+    description: "Enhance your walls with our premium range of wallpapers and designer interior panels. From textured charcoal to elegant fluted designs, we provide modern wall solutions that transform your living and work spaces.",
+    image: "/images/wallpaper/wallpaper-main.png",
+    subServices: [
+      {
+        slug: "charcoal-panels",
+        title: "Charcoal Panels",
+        description: "Premium charcoal wall panels with unique textures and patterns for a sophisticated, modern look. Perfect for feature walls and luxurious office interiors.",
+        image: "/images/wallpaper/charcoal-panels.png",
+      },
+      {
+        slug: "pvc-panels",
+        title: "PVC Panels",
+        description: "Durable and water-resistant PVC wall panels available in various finishes, including wood and marble textures. An ideal, low-maintenance solution for stylish walls.",
+        image: "/images/wallpaper/pvc-panels.png",
+      },
+      {
+        slug: "fluted-panels",
+        title: "Fluted Panels",
+        description: "Add depth and character to your interiors with our elegant fluted wall panels. These vertical designs create a timeless aesthetic in lounges, bedrooms, and commercial spaces.",
+        image: "/images/wallpaper/fluted-panels.png",
+      },
+      {
+        slug: "wpc-panels",
+        title: "WPC Panels",
+        description: "Wood Plastic Composite (WPC) panels offer the natural beauty of wood with the durability of polymer. Eco-friendly, termite-proof, and moisture-resistant wall cladding.",
+        image: "/images/wallpaper/wpc-panels.png",
+      },
+      {
+        slug: "cnc-engraved-panels",
+        title: "CNC Engraved Panels",
+        description: "Custom-designed CNC engraved wooden and MDF panels. Add artistic flair and intricate geometric patterns to your walls with our precision architectural engraving.",
+        image: "/images/wallpaper/cnc-panels.png",
+      },
+    ],
+  },
 ];
 
 export function getServiceCategory(slug: string) {

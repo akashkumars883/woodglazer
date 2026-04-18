@@ -171,10 +171,10 @@ export function Header() {
         <div className="flex flex-1 items-center justify-end gap-2 sm:gap-3">
           <Link
             href="/contact"
-            className="hidden items-center rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-[0_16px_35px_-20px_rgba(197,133,36,0.9)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary sm:inline-flex"
+            className="hidden items-center rounded-full tracking-wide bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-[0_16px_35px_-20px_rgba(197,133,36,0.9)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary sm:inline-flex"
           >
             <PhoneCall className="mr-2 h-4 w-4" />
-            Request Quote
+            +91 971704859
           </Link>
 
           <button

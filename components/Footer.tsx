@@ -13,7 +13,7 @@ const navigationItems = [
 const serviceItems = [
   { href: "/services/wood-polishing-services", label: "Wood Polishing" },
   { href: "/services/carpentry-services", label: "Carpentry Services" },
-  { href: "/services/interior-finishing", label: "Interior Finishing" },
+  { href: "/services/wallpaper-and-interior-panels", label: "Wallpaper & Panels" },
 ];
 
 // Custom Social Icons to avoid library version issues

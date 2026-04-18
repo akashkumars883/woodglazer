@@ -59,11 +59,18 @@ button {
 }
 
 .service-outline-title {
-  color: transparent;
-  -webkit-text-stroke: 1.5px var(--secondary);
+  color: var(--secondary); /* Default solid color for mobile */
+  -webkit-text-stroke: 0;   /* No outline on mobile */
   transition:
     color 180ms ease,
     -webkit-text-stroke-color 180ms ease;
+}
+
+@media (min-width: 640px) {
+  .service-outline-title {
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--secondary); /* Outline on larger screens */
+  }
 }
 
 .service-outline-title:hover,

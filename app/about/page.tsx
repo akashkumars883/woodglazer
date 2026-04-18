@@ -76,10 +76,7 @@ export default function AboutPage() {
       <WhyChooseUs />
 
       {/* Vision/Mission Section */}
-      <section className="py-20 sm:py-32 bg-stone-900 text-white overflow-hidden relative">
-        <div className="absolute inset-0 opacity-20 pointer-events-none">
-           <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-primary rounded-full blur-3xl" />
-        </div>
+      <section className="py-20 sm:py-32 text-white overflow-hidden relative">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 sm:gap-20">
             <div>
