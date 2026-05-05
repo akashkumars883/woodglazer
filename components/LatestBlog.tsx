@@ -50,6 +50,7 @@ export default async function LatestBlog() {
                   alt={blog.title}
                   src={blog.image}
                   fill
+                  unoptimized
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
                 <div className="absolute top-4 left-4">

@@ -63,11 +63,15 @@ export default function WhyChooseUs() {
 
           <div className="relative h-[320px] overflow-hidden rounded-lg border bg-white shadow-sm sm:h-[400px] lg:h-[460px]">
             <Image
-              src="/images/hero-image2.jpg"
+              src="/images/hero-image2.png"
               alt="Wood Glazer team performing precision carpentry and finishing work"
               fill
+              priority
+              unoptimized
               sizes="(max-width: 768px) 100vw, 50vw"
               className="object-cover"
+              placeholder="blur"
+              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN8/+ZNPQAIXwM4966biwAAAABJRU5ErkJggg=="
             />
             <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.05)_0%,rgba(0,0,0,0.22)_100%)]" />
           </div>

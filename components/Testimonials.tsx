@@ -50,6 +50,7 @@ export default function Testimonials() {
               src="/images/Google-Review-QR.jpeg"
               alt="Google review QR code"
               fill
+              unoptimized
               sizes="128px"
               className="object-cover grayscale hover:grayscale-0 transition-all duration-500"
             />
