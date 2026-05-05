@@ -26,24 +26,20 @@ function ServiceImage({
   fallbackSrc,
   priority = false,
 }: ServiceImageProps) {
-  const [imageSrc, setImageSrc] = useState(src);
-
   return (
     <Image
-      src={imageSrc}
+      src={src || fallbackSrc}
       alt={alt}
       fill
       priority={priority}
-      sizes="(max-width: 768px) 100vw, 50vw"
+      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
       className="object-cover"
-      onError={() => {
-        if (imageSrc !== fallbackSrc) {
-          setImageSrc(fallbackSrc);
-        }
-      }}
+      placeholder="blur"
+      blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN8/+ZNPQAIXwM4966biwAAAABJRU5ErkJggg=="
     />
   );
 }
+
 
 interface SubService {
   slug: string;
@@ -136,6 +132,7 @@ export default function Services() {
                             <ServiceImage
                               src={subService.image}
                               alt={subService.title}
+                              priority={serviceIndex === 0 && subServiceIndex < 3}
                               fallbackSrc={
                                 fallbackImages[
                                   (serviceIndex + subServiceIndex) %

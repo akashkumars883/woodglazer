@@ -25,6 +25,7 @@ export default function PageHero({
           src={backgroundImage}
           alt={imageAlt}
           fill
+          priority
           className="object-cover opacity-40 scale-105"
           unoptimized
         />

@@ -33,7 +33,7 @@ export default function FAQ() {
           <p className="text-sm font-black uppercase tracking-[0.3em] text-primary mb-3">
             Common Inquiries
           </p>
-          <h2 className="text-4xl md:text-5xl font-display font-medium text-secondary">
+          <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-secondary">
             Questions & Answers
           </h2>
         </FadeIn>
@@ -45,7 +45,7 @@ export default function FAQ() {
                 className="group rounded-2xl border border-stone-200 bg-stone-50/50 p-6 transition-all duration-300 open:bg-white open:shadow-xl open:border-primary/20"
               >
                 <summary className="flex cursor-pointer list-none items-center justify-between text-lg font-bold text-secondary">
-                  <span className="pr-6 font-display">{faq.question}</span>
+                  <span className="pr-6">{faq.question}</span>
                   <span className="shrink-0 transition-transform duration-300 group-open:rotate-180">
                     <svg className="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />

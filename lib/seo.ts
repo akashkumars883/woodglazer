@@ -6,11 +6,12 @@ import { type BlogPost } from "@/lib/blogData";
 type SchemaNode = Record<string, unknown>;
 
 const serviceImageFallbacks: Record<string, string> = {
-  "wood-polishing-services": "/images/hero-image1.jpg",
-  "carpentry-services": "/images/hero-image2.jpg",
+  "wood-polishing-services": "/images/hero-image1.png",
+  "carpentry-services": "/images/hero-image2.png",
 };
 
-const defaultServiceImage = "/images/hero-image3.jpg";
+const defaultServiceImage = "/images/hero-image3.png";
+
 
 const organizationId = absoluteUrl("/#organization");
 const websiteId = absoluteUrl("/#website");
