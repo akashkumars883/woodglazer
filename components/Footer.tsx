@@ -38,45 +38,51 @@ const LinkedinIcon = () => (
 export default function Footer() {
   return (
     <footer className="bg-black text-stone-300 pt-16 pb-8 border-t border-white/5">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+      <div className="mx-auto max-w-7xl px-4 sm:px-4 lg:px-4">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16 mb-16">
           {/* Brand Column */}
-          <div className="space-y-6">
-            <Link href="/" className="inline-block">
+          <div className="col-span-2 lg:col-span-1 space-y-8">
+            <Link href="/" className="inline-block -ml-2 sm:-ml-4 group">
               <Image
                 src="/brand/wood-glazer-logo.png"
                 alt="Wood Glazer"
-                width={150}
-                height={50}
-                className="brightness-0 invert opacity-90"
+                width={200}
+                height={80}
+                className="opacity-90 grayscale brightness-[60] contrast-100 group-hover:opacity-100 transition-all duration-500 object-contain object-left h-16 sm:h-20 lg:h-24 w-auto"
+                unoptimized
               />
             </Link>
-            <p className="text-sm leading-relaxed text-stone-400 max-w-xs">
+            <p className="text-sm leading-relaxed text-stone-400 max-w-sm font-medium">
               {siteConfig.description}
             </p>
-            <div className="flex items-center gap-4">
-              <Link href="#" className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary hover:text-white transition-all">
-                <InstagramIcon />
-              </Link>
-              <Link href="#" className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary hover:text-white transition-all">
-                <FacebookIcon />
-              </Link>
-              <Link href="#" className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary hover:text-white transition-all">
-                <LinkedinIcon />
-              </Link>
+            <div className="flex items-center gap-5">
+              {[
+                { icon: InstagramIcon, href: "#" },
+                { icon: FacebookIcon, href: "#" },
+                { icon: LinkedinIcon, href: "#" },
+              ].map((social, i) => (
+                <Link 
+                  key={i} 
+                  href={social.href} 
+                  className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center hover:bg-primary hover:text-white transition-all duration-300 border border-white/5 hover:border-primary/50"
+                >
+                  <social.icon />
+                </Link>
+              ))}
             </div>
           </div>
 
           {/* Quick Links */}
-          <div>
-            <h4 className="text-white font-bold text-lg mb-6 uppercase tracking-wider">Quick Links</h4>
+          <div className="col-span-1">
+            <h4 className="text-white font-display font-medium text-lg mb-8 tracking-wide">Quick Links</h4>
             <ul className="space-y-4">
               {navigationItems.map((item) => (
                 <li key={item.label}>
                   <Link 
                     href={item.href} 
-                    className="text-stone-400 hover:text-primary transition-colors text-sm font-medium inline-block"
+                    className="text-stone-400 hover:text-primary transition-all duration-300 text-sm font-medium flex items-center group"
                   >
+                    <span className="w-0 group-hover:w-4 h-px bg-primary mr-0 group-hover:mr-2 transition-all duration-300" />
                     {item.label}
                   </Link>
                 </li>
@@ -85,15 +91,16 @@ export default function Footer() {
           </div>
 
           {/* Services */}
-          <div>
-            <h4 className="text-white font-bold text-lg mb-6 uppercase tracking-wider">Our Services</h4>
+          <div className="col-span-1">
+            <h4 className="text-white font-display font-medium text-lg mb-8 tracking-wide">Services</h4>
             <ul className="space-y-4">
               {serviceItems.map((item) => (
                 <li key={item.label}>
                   <Link 
                     href={item.href} 
-                    className="text-stone-400 hover:text-primary transition-colors text-sm font-medium inline-block"
+                    className="text-stone-400 hover:text-primary transition-all duration-300 text-sm font-medium flex items-center group"
                   >
+                    <span className="w-0 group-hover:w-4 h-px bg-primary mr-0 group-hover:mr-2 transition-all duration-300" />
                     {item.label}
                   </Link>
                 </li>
@@ -102,30 +109,32 @@ export default function Footer() {
           </div>
 
           {/* Contact */}
-          <div>
-            <h4 className="text-white font-bold text-lg mb-6 uppercase tracking-wider">Contact Us</h4>
-            <ul className="space-y-5">
-              <li className="flex gap-3">
-                <Phone className="w-5 h-5 text-primary shrink-0" />
-                <div className="text-sm">
-                   <p className="text-stone-500 font-bold uppercase text-[10px] tracking-widest mb-1">Call Us</p>
-                   <p className="text-stone-300 font-bold">+91 9717256514</p>
+          <div className="col-span-2 lg:col-span-1">
+            <h4 className="text-white font-display font-medium text-lg mb-8 tracking-wide">Contact Us</h4>
+            <ul className="space-y-6">
+              {[
+                { icon: Phone, label: "Call Us", value: "+91 9717048359" },
+                { icon: Mail, label: "Email Us", value: "woodglazer@gmail.com" },
+              ].map((item) => (
+                <li key={item.label} className="flex gap-4 group">
+                  <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0 border border-white/5 group-hover:border-primary/50 transition-colors">
+                    <item.icon className="w-5 h-5 text-primary" />
+                  </div>
+                  <div className="text-sm">
+                    <p className="text-stone-500 font-bold uppercase text-[10px] tracking-widest mb-1">{item.label}</p>
+                    <p className="text-stone-300 font-bold group-hover:text-primary transition-colors">{item.value}</p>
+                  </div>
+                </li>
+              ))}
+              <li className="flex gap-4 group">
+                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0 border border-white/5 group-hover:border-primary/50 transition-colors">
+                  <MapPin className="w-5 h-5 text-primary" />
                 </div>
-              </li>
-              <li className="flex gap-3">
-                <Mail className="w-5 h-5 text-primary shrink-0" />
                 <div className="text-sm">
-                   <p className="text-stone-500 font-bold uppercase text-[10px] tracking-widest mb-1">Email Us</p>
-                   <p className="text-stone-300 font-bold">woodglazer@gmail.com</p>
-                </div>
-              </li>
-              <li className="flex gap-3">
-                <MapPin className="w-5 h-5 text-primary shrink-0" />
-                <div className="text-sm">
-                   <p className="text-stone-500 font-bold uppercase text-[10px] tracking-widest mb-1">Our Office</p>
-                   <p className="text-stone-300 font-bold leading-relaxed">
-                     B-474, Basement, Greenfield Colony, Faridabad, Haryana - 121010
-                   </p>
+                  <p className="text-stone-500 font-bold uppercase text-[10px] tracking-widest mb-1">Our Office</p>
+                  <p className="text-stone-300 font-medium leading-relaxed">
+                    B-474, Basement, Greenfield Colony, Faridabad, Haryana - 121010
+                  </p>
                 </div>
               </li>
             </ul>
@@ -133,13 +142,13 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-xs text-stone-500 font-medium tracking-wide">
+        <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+          <p className="text-stone-500 text-xs font-medium">
             © {new Date().getFullYear()} Wood Glazer. All rights reserved.
           </p>
-          <div className="flex gap-6">
-            <Link href="#" className="text-xs text-stone-600 hover:text-stone-400 transition-colors uppercase tracking-widest font-bold">Privacy Policy</Link>
-            <Link href="#" className="text-xs text-stone-600 hover:text-stone-400 transition-colors uppercase tracking-widest font-bold">Terms of Service</Link>
+          <div className="flex gap-8 text-stone-500 text-xs font-medium">
+            <Link href="/privacy-policy" className="hover:text-primary transition-colors">Privacy Policy</Link>
+            <Link href="/terms-of-service" className="hover:text-primary transition-colors">Terms of Service</Link>
           </div>
         </div>
       </div>

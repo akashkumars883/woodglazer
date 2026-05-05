@@ -2,6 +2,8 @@ import Image from "next/image";
 import WhyChooseUs from "@/components/WhyChooseUs";
 import CTASection from "@/components/CTASection";
 import { buildMetadata } from "@/lib/seo";
+import { FadeIn, FadeInStagger } from "@/components/Motion";
+import PageHero from "@/components/PageHero";
 
 export const metadata = buildMetadata({
   title: "About Wood Glazer - Excellence in Wood Craftsmanship",
@@ -11,93 +13,108 @@ export const metadata = buildMetadata({
 
 export default function AboutPage() {
   return (
-    <main>
-      {/* Hero Section */}
-      <section className="relative overflow-hidden pt-16 pb-20 sm:pt-16 sm:pb-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col items-center text-center">
-            <p className="text-sm font-medium uppercase tracking-[0.22em] text-muted mb-4">
-              Our Story
-            </p>
-            <h1 className="service-outline-title text-4xl font-bold sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl mb-8">
-              ABOUT <span className="text-secondary opacity-100">WOOD GLAZER</span>
-            </h1>
-            <p className="max-w-3xl text-lg leading-relaxed text-foreground/80 sm:text-xl">
-              We are dedicated to the art of wood preservation and enhancement. 
-              With decades of experience in premium polishing and custom carpentry, 
-              we bring timeless quality and modern precision to every project.
-            </p>
-          </div>
-        </div>
-      </section>
+    <main className="bg-white">
+      <PageHero
+        title="Crafting Timeless Heritage"
+        backgroundImage="https://images.unsplash.com/photo-1520032484190-e5ef81d87978?auto=format&fit=crop&q=80"
+      />
 
-      {/* Philosophy Section */}
-      <section className="py-20 sm:py-32">
+      {/* Heritage & Innovation */}
+      <section className="py-24 sm:py-40">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div className="relative aspect-square overflow-hidden rounded-lg shadow-2xl">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+            <FadeIn direction="left" className="relative aspect-[4/5] overflow-hidden rounded-3xl shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)]">
               <Image
-                src="/images/hero-image1.png"
+                src="https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&q=80"
                 alt="Wood Glazer Craftsmanship"
                 fill
                 className="object-cover"
+                unoptimized
               />
-            </div>
-            <div className="space-y-8">
-              <div className="mb-4">
-                <p className="text-sm font-medium uppercase tracking-[0.22em] text-muted mb-2">
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+              <div className="absolute bottom-10 left-10 text-white">
+                <p className="text-5xl font-display italic">Mastering the Grain</p>
+              </div>
+            </FadeIn>
+            
+            <FadeInStagger className="space-y-10">
+              <FadeIn>
+                <p className="text-sm font-black uppercase tracking-[0.3em] text-primary mb-4">
                   Our Philosophy
                 </p>
-                <h2 className="text-3xl font-bold text-secondary sm:text-4xl">
-                  Crafting <span className="text-primary italic font-serif">Excellence</span> in Every Grain
+                <h2 className="text-4xl sm:text-5xl font-display font-medium text-secondary leading-tight">
+                  Where Nature Meets <br /> <span className="text-primary italic">Artistic Precision</span>
                 </h2>
-              </div>
-              <p className="text-lg text-foreground/72 leading-relaxed">
-                At Wood Glazer, we believe that wood is a living material that reflects the character of a space. 
-                Our approach combines traditional hand-polishing techniques with the latest in protective coatings (PU, Duco, Melamine) 
-                to ensure durability without compromising the natural beauty.
-              </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4">
-                <div className="p-6 bg-stone-50 rounded-2xl border border-stone-100 transition-hover duration-300 hover:shadow-md">
-                   <h3 className="text-primary font-bold text-lg mb-2">Quality First</h3>
-                   <p className="text-sm text-stone-500">We source only the finest materials and use industry-leading finishing products.</p>
+              </FadeIn>
+              
+              <FadeIn>
+                <p className="text-lg text-stone-600 leading-relaxed font-medium">
+                  At Wood Glazer, we don't just "polish" wood; we restore its soul. Whether it's a centuries-old heirloom or a modern architectural masterpiece, our team of master craftsmen treats every surface with the reverence it deserves.
+                </p>
+              </FadeIn>
+
+              <FadeIn className="grid grid-cols-1 sm:grid-cols-2 gap-8 pt-6">
+                <div className="space-y-4">
+                  <div className="w-12 h-px bg-primary" />
+                  <h3 className="text-xl font-display font-bold text-secondary">Premium Sourcing</h3>
+                  <p className="text-stone-500 text-sm leading-relaxed">We utilize exclusively high-grade PU, Melamine, and Duco finishes from globally renowned brands.</p>
                 </div>
-                <div className="p-6 bg-stone-50 rounded-2xl border border-stone-100 transition-hover duration-300 hover:shadow-md">
-                   <h3 className="text-primary font-bold text-lg mb-2">Precision Care</h3>
-                   <p className="text-sm text-stone-500">Every corner and grain is meticulously treated to achieve a flawless finish.</p>
+                <div className="space-y-4">
+                  <div className="w-12 h-px bg-primary" />
+                  <h3 className="text-xl font-display font-bold text-secondary">Sustainable Ethics</h3>
+                  <p className="text-stone-500 text-sm leading-relaxed">Our processes prioritize eco-friendly coatings that protect both your home and the environment.</p>
                 </div>
-              </div>
-            </div>
+              </FadeIn>
+            </FadeInStagger>
           </div>
         </div>
       </section>
 
-      {/* Why Choose Us */}
+      {/* Stats/Metrics */}
+      <section className="bg-secondary py-24 sm:py-32 overflow-hidden">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <FadeInStagger className="grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
+            {[
+              { label: "Projects Completed", value: "500+" },
+              { label: "Expert Craftsmen", value: "25+" },
+              { label: "Years Experience", value: "15+" },
+              { label: "Happy Clients", value: "100%" },
+            ].map((stat) => (
+              <FadeIn key={stat.label} className="space-y-2">
+                <p className="text-4xl sm:text-5xl font-display text-primary">{stat.value}</p>
+                <p className="text-xs font-black uppercase tracking-widest text-stone-400">{stat.label}</p>
+              </FadeIn>
+            ))}
+          </FadeInStagger>
+        </div>
+      </section>
+
       <WhyChooseUs />
 
-      {/* Vision/Mission Section */}
-      <section className="py-20 sm:py-32 text-white overflow-hidden relative">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 sm:gap-20">
-            <div>
-              <h3 className="text-3xl font-bold text-primary mb-6">Our Vision</h3>
-              <p className="text-lg text-stone-400 leading-relaxed">
-                To be the leading name in specialty wood finishing and carpentry in India, 
-                set recognized by our commitment to sustainability, innovation, and unparalleled craftsmanship.
+      {/* Vision & Mission - Reimagined */}
+      <section className="py-24 sm:py-40 bg-stone-50">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-32">
+            <FadeIn className="space-y-8">
+              <h3 className="text-3xl font-display font-medium text-secondary flex items-center gap-4">
+                <span className="text-primary italic">01.</span> Our Vision
+              </h3>
+              <p className="text-lg text-stone-600 leading-relaxed font-medium border-l-2 border-primary/20 pl-8">
+                To redefine the standards of luxury interior finishing in India, becoming the most trusted name for discerning clients who value perfection in every grain.
               </p>
-            </div>
-            <div>
-              <h3 className="text-3xl font-bold text-primary mb-6">Our Mission</h3>
-              <p className="text-lg text-stone-400 leading-relaxed">
-                To transform ordinary wooden structures into extraordinary pieces of art 
-                while providing our clients with durable, aesthetically superior, and value-driven results.
+            </FadeIn>
+            <FadeIn className="space-y-8">
+              <h3 className="text-3xl font-display font-medium text-secondary flex items-center gap-4">
+                <span className="text-primary italic">02.</span> Our Mission
+              </h3>
+              <p className="text-lg text-stone-600 leading-relaxed font-medium border-l-2 border-primary/20 pl-8">
+                To blend heritage craftsmanship with modern technological advancements, delivering wooden surfaces that are not just beautiful, but built to last for generations.
               </p>
-            </div>
+            </FadeIn>
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
       <CTASection />
     </main>
   );

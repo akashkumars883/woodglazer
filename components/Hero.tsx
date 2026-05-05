@@ -9,6 +9,7 @@ import {
   useEffectEvent,
   useState,
 } from "react";
+import { FadeIn, FadeInStagger } from "./Motion";
 
 const heroSlides = [
   {
@@ -81,7 +82,7 @@ export function Hero() {
 
   return (
     <section className="relative isolate w-full overflow-hidden">
-      <div className="relative h-[80vh] w-full">
+      <div className="relative min-h-[600px] h-[80vh] sm:h-[85vh] w-full">
         <div
           className="flex h-full transition-transform duration-700 ease-out"
           style={{ transform: `translate3d(-${activeSlide * 100}%, 0, 0)` }}
@@ -89,7 +90,7 @@ export function Hero() {
           {heroSlides.map((slide, index) => (
             <article
               key={slide.eyebrow}
-              className="relative min-w-full"
+              className="relative min-w-full h-full"
               aria-hidden={index !== activeSlide}
             >
               <Image
@@ -101,41 +102,45 @@ export function Hero() {
                 sizes="100vw"
                 className="object-cover"
               />
-              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.12)_0%,rgba(0,0,0,0.18)_30%,rgba(0,0,0,0.58)_100%)]" />
+              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.3)_0%,rgba(0,0,0,0.2)_30%,rgba(0,0,0,0.6)_100%)]" />
             </article>
           ))}
         </div>
 
-        <div className="absolute inset-0 z-10 flex items-center">
+        <div className="absolute inset-0 z-10 flex items-center py-20">
           <div className="mx-auto flex w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="max-w-3xl text-white">
+            <FadeInStagger className="max-w-3xl text-white">
               <div className="mt-6">
-                <h1 className="mt-4 max-w-3xl text-4xl font-semibold leading-tight text-white sm:text-5xl lg:text-6xl">
-                  {heroSlides[activeSlide].title}
-                </h1>
-                <p className="mt-5 max-w-2xl text-base leading-8 text-white/82 sm:text-lg">
-                  {heroSlides[activeSlide].description}
-                </p>
+                <FadeIn>
+                  <h1 className="mt-4 max-w-3xl text-3xl font-display font-medium leading-tight text-white sm:text-6xl lg:text-7xl">
+                    {heroSlides[activeSlide].title}
+                  </h1>
+                </FadeIn>
+                <FadeIn delay={0.2}>
+                  <p className="mt-4 max-w-2xl text-base leading-relaxed text-stone-200 sm:text-xl font-medium">
+                    {heroSlides[activeSlide].description}
+                  </p>
+                </FadeIn>
               </div>
 
-              <div className="mt-8 flex flex-wrap items-center gap-4">
+              <FadeIn delay={0.4} className="mt-8 sm:mt-10 flex flex-wrap items-center gap-4 sm:gap-6">
                 <Link
                   href={heroSlides[activeSlide].buttonHref}
-                  className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-[0_18px_36px_-22px_rgba(197,133,36,0.9)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary"
+                  className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3.5 sm:px-8 sm:py-4 text-sm sm:text-base font-bold text-white shadow-[0_20px_50px_-12px_rgba(197,133,36,0.6)] transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:text-secondary"
                 >
                   {heroSlides[activeSlide].buttonLabel}
-                  <ArrowRight className="h-4 w-4" />
+                  <ArrowRight className="h-5 w-5" />
                 </Link>
 
-                <div className="inline-flex items-center gap-3 rounded-full border border-white/16 bg-white/10 px-4 py-2.5 text-sm text-white/78 shadow-sm backdrop-blur-sm">
-                  <span className="font-semibold text-white">
+                <div className="inline-flex items-center gap-3 rounded-xl border border-white/20 bg-white/10 px-4 py-2.5 sm:px-5 sm:py-3 text-sm text-white/90 shadow-sm backdrop-blur-md">
+                  <span className="font-bold text-white text-base sm:text-lg">
                     0{activeSlide + 1}
                   </span>
-                  <span className="h-px w-8 bg-white/22" />
-                  <span>0{heroSlides.length}</span>
+                  <span className="h-px w-8 sm:w-10 bg-white/30" />
+                  <span className="font-medium">0{heroSlides.length}</span>
                 </div>
-              </div>
-            </div>
+              </FadeIn>
+            </FadeInStagger>
           </div>
         </div>
 

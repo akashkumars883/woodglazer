@@ -271,6 +271,7 @@ export default async function NestedServicePage({
                       alt={item.title}
                       fill
                       className="object-cover transition-transform duration-700 group-hover:scale-110"
+                      unoptimized
                     />
                   </div>
                   <h3 className="font-bold text-lg text-secondary group-hover:text-primary transition-colors mb-2">{item.title}</h3>

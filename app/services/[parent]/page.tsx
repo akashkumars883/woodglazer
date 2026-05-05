@@ -162,6 +162,7 @@ export default async function ServicesParent({
                     alt={subService.title}
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    unoptimized
                   />
                 </div>
                 <div className="space-y-4">

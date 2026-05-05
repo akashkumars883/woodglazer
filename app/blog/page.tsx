@@ -3,8 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { buildMetadata, createBlogIndexNode, createBreadcrumbNode } from "@/lib/seo";
 import { StructuredData } from "@/components/StructuredData";
-
 import { getDynamicSiteConfig } from "@/lib/site";
+import PageHero from "@/components/PageHero";
 
 export async function generateMetadata() {
   const config = await getDynamicSiteConfig();
@@ -15,7 +15,6 @@ export async function generateMetadata() {
     path: "/blog",
   }, config);
 }
-
 
 export default async function BlogPage() {
   const { data: blogList } = await supabase
@@ -28,11 +27,11 @@ export default async function BlogPage() {
   const otherBlogs = blogPosts.filter((b: { slug: string }) => b.slug !== featuredBlog?.slug);
 
   return (
-    <main className="min-h-screen pt-24 pb-16">
+    <main className="min-h-screen pb-16 bg-white">
       <StructuredData
         id="blog-listing-data"
         data={[
-          createBlogIndexNode((blogPosts || []).map((b: { title: string; slug: string; description: string; image: string; category: string; author: string; created_at: string; read_time: string; content?: string }) => ({
+          createBlogIndexNode((blogPosts || []).map((b: any) => ({
             ...b,
             date: b.created_at,
             readTime: b.read_time,
@@ -45,31 +44,15 @@ export default async function BlogPage() {
         ]}
       />
 
-      {/* Hero Section */}
-      <section className="py-4 sm:py-4">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mb-4">
-            <p className="text-sm font-medium uppercase tracking-[0.22em] text-muted">
-              Insights & Updates
-            </p>
-          </div>
-
-          <div className="mb-12">
-            <h1 className="service-outline-title text-4xl font-semibold sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl uppercase tracking-tight">
-              Our Blog
-            </h1>
-            <p className="mt-6 text-lg text-stone-600 max-w-2xl leading-relaxed">
-              Exploring the art and science of wood finishing. From maintenance tips to design inspiration, 
-              discover everything you need to know about premium interiors.
-            </p>
-          </div>
-        </div>
-      </section>
+      <PageHero
+        title="Insights & Updates"
+        backgroundImage="https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?auto=format&fit=crop&q=80"
+      />
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Featured Post */}
         {featuredBlog && (
-          <section className="mb-16">
+          <section className="mb-16 ">
             <Link href={`/blog/${featuredBlog.slug}`} className="group block">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center bg-white rounded-lg overflow-hidden border border-stone-200 shadow-sm transition-all hover:shadow-xl hover:border-primary/20">
                 <div className="relative aspect-[16/9] lg:aspect-square overflow-hidden">
@@ -79,6 +62,7 @@ export default async function BlogPage() {
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                     priority
+                    unoptimized
                   />
                   <div className="absolute top-4 left-4">
                     <span className="bg-primary text-white px-3 py-1 rounded-full text-sm font-medium shadow-lg">
@@ -112,7 +96,7 @@ export default async function BlogPage() {
 
         {/* Other Posts Grid */}
         <section>
-          <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center justify-between mb-8 mt-10">
             <h2 className="text-2xl font-bold text-stone-900">Latest Articles</h2>
             <div className="h-px flex-1 bg-stone-200 ml-6 hidden sm:block"></div>
           </div>
@@ -126,6 +110,7 @@ export default async function BlogPage() {
                     src={blog.image}
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    unoptimized
                   />
                   <div className="absolute top-4 left-4">
                     <span className="bg-white/90 backdrop-blur-sm text-stone-900 px-3 py-1 rounded-full text-xs font-semibold shadow-sm">
