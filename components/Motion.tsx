@@ -51,7 +51,7 @@ export function FadeIn({
   );
 }
 
-export function FadeInStagger({ children, ...props }: { children: ReactNode }) {
+export function FadeInStagger({ children, ...props }: HTMLMotionProps<"div">) {
   return (
     <motion.div
       initial="initial"
@@ -70,3 +70,4 @@ export function FadeInStagger({ children, ...props }: { children: ReactNode }) {
     </motion.div>
   );
 }
+
