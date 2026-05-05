@@ -46,9 +46,9 @@ export default function Footer() {
               <Image
                 src="/brand/wood-glazer-logo.png"
                 alt="Wood Glazer"
-                width={200}
+                width={100}
                 height={80}
-                className="opacity-90 grayscale brightness-[60] contrast-100 group-hover:opacity-100 transition-all duration-500 object-contain object-left h-16 sm:h-20 lg:h-24 w-auto"
+                className="opacity-90 grayscale brightness-[60] contrast-100 group-hover:opacity-100 transition-all duration-500 object-contain object-left h-16 sm:h-20 lg:h-24 w-40"
                 unoptimized
               />
             </Link>

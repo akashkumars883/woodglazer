@@ -37,10 +37,7 @@ export default function Testimonials() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <FadeIn className="mb-16 flex flex-col md:flex-row items-start md:items-end justify-between gap-8">
           <div className="max-w-2xl">
-            <p className="text-sm font-black uppercase tracking-[0.3em] text-primary mb-3">
-              Client Stories
-            </p>
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-display font-medium text-secondary leading-tight">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-secondary leading-tight">
               Trusted by Homeowners & Designers
             </h2>
           </div>

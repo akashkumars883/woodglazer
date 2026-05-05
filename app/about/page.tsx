@@ -33,7 +33,7 @@ export default function AboutPage() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
               <div className="absolute bottom-10 left-10 text-white">
-                <p className="text-5xl font-display italic">Mastering the Grain</p>
+                <p className="text-5xl font-display">Mastering the Grain</p>
               </div>
             </FadeIn>
             
@@ -43,7 +43,7 @@ export default function AboutPage() {
                   Our Philosophy
                 </p>
                 <h2 className="text-4xl sm:text-5xl font-display font-medium text-secondary leading-tight">
-                  Where Nature Meets <br /> <span className="text-primary italic">Artistic Precision</span>
+                  Where Nature Meets <br /> <span className="text-primary">Artistic Precision</span>
                 </h2>
               </FadeIn>
               
@@ -71,7 +71,7 @@ export default function AboutPage() {
       </section>
 
       {/* Stats/Metrics */}
-      <section className="bg-secondary py-24 sm:py-32 overflow-hidden">
+      <section className=" py-24 sm:py-32 overflow-hidden">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <FadeInStagger className="grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
             {[
@@ -82,7 +82,7 @@ export default function AboutPage() {
             ].map((stat) => (
               <FadeIn key={stat.label} className="space-y-2">
                 <p className="text-4xl sm:text-5xl font-display text-primary">{stat.value}</p>
-                <p className="text-xs font-black uppercase tracking-widest text-stone-400">{stat.label}</p>
+                <p className="text-xs font-semibold uppercase tracking-widest text-stone-400">{stat.label}</p>
               </FadeIn>
             ))}
           </FadeInStagger>
