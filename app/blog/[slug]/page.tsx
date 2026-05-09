@@ -6,6 +6,7 @@ import BlogSidebar from "@/components/BlogSidebar";
 import CTASection from "@/components/CTASection";
 import { supabase } from "@/lib/supabase";
 import { getDynamicSiteConfig } from "@/lib/site";
+import BlogShareButtons from "@/components/BlogShareButtons";
 
 export async function generateStaticParams() {
   const { data: blogs } = await supabase
@@ -41,6 +42,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function BlogDetails({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const config = await getDynamicSiteConfig();
   
   const { data: blog } = await supabase
     .from("blog_posts")
@@ -49,6 +51,8 @@ export default async function BlogDetails({ params }: { params: Promise<{ slug: 
     .single();
 
   if (!blog) notFound();
+
+  const postUrl = `${config.url}/blog/${blog.slug}`;
 
   // Map to BlogPost interface to maintain full type-safety
   const formattedBlog = {
@@ -146,18 +150,8 @@ export default async function BlogDetails({ params }: { params: Promise<{ slug: 
               />
               
               {/* Share section */}
-              <div className="mt-16 pt-8 border-t border-stone-100 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-                <div className="flex items-center gap-4">
-                  <span className="text-stone-500 font-medium">Share this article:</span>
-                  <div className="flex gap-3">
-                    {['Twitter', 'LinkedIn', 'Facebook'].map((platform) => (
-                      <button key={platform} className="w-10 h-10 rounded-full border border-stone-200 flex items-center justify-center text-stone-500 hover:border-primary hover:text-primary transition-all">
-                        <span className="sr-only">{platform}</span>
-                        <div className="w-5 h-5 rounded-sm bg-current opacity-20" />
-                      </button>
-                    ))}
-                  </div>
-                </div>
+              <div className="mt-16 pt-8 border-t border-stone-100">
+                <BlogShareButtons url={postUrl} title={formattedBlog.title} />
               </div>
             </div>
 
