@@ -57,13 +57,14 @@ export default function Footer() {
             </p>
             <div className="flex items-center gap-5">
               {[
-                { icon: InstagramIcon, href: "#" },
-                { icon: FacebookIcon, href: "#" },
-                { icon: LinkedinIcon, href: "#" },
+                { icon: InstagramIcon, href: "https://www.instagram.com/wood_glazer/" },
+                { icon: FacebookIcon, href: "https://www.facebook.com/woodglazers/" },
               ].map((social, i) => (
                 <Link 
                   key={i} 
                   href={social.href} 
+                  target="_blank"
+                  rel="noreferrer"
                   className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center hover:bg-primary hover:text-white transition-all duration-300 border border-white/5 hover:border-primary/50"
                 >
                   <social.icon />
