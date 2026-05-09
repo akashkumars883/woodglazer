@@ -106,7 +106,7 @@ export default async function AdminDashboard() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
            <h1 className="text-3xl font-semibold text-secondary">Dashboard Overview</h1>
-           <p className="text-stone-500 font-medium">Welcome back, Wood Glazer Team. Here&apos;s what&apos;s happening today.</p>
+           <p className="text-stone-500 font-medium">Welcome back, Team Wood Glazer. Here&apos;s what&apos;s happening today.</p>
         </div>
         <Link 
           href="/admin/blog/new"

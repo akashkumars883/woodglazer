@@ -54,6 +54,13 @@ export default async function BlogDetails({ params }: { params: Promise<{ slug: 
 
   const postUrl = `${config.url}/blog/${blog.slug}`;
 
+  const formatAuthor = (authorName: string | null) => {
+    if (!authorName || authorName === "Wood Glazer Team" || authorName === "Wood Glazer Admin" || authorName === "admin") {
+      return "Team Wood Glazer";
+    }
+    return authorName;
+  };
+
   // Map to BlogPost interface to maintain full type-safety
   const formattedBlog = {
     title: blog.title || "",
@@ -61,7 +68,7 @@ export default async function BlogDetails({ params }: { params: Promise<{ slug: 
     description: blog.description || "",
     image: blog.image || "",
     date: blog.created_at || "",
-    author: blog.author || "Wood Glazer Team",
+    author: formatAuthor(blog.author),
     category: blog.category || "General",
     readTime: blog.read_time || "",
     content: blog.content || "",
@@ -80,7 +87,7 @@ export default async function BlogDetails({ params }: { params: Promise<{ slug: 
     description: b.description || "",
     image: b.image || "",
     date: b.created_at || "",
-    author: b.author || "Wood Glazer Team",
+    author: formatAuthor(b.author),
     category: b.category || "General",
     readTime: b.read_time || "",
     content: b.content || "",
@@ -156,9 +163,9 @@ export default async function BlogDetails({ params }: { params: Promise<{ slug: 
             </div>
 
             {/* Sidebar Column */}
-            <div className="lg:col-span-4">
+            <aside className="lg:col-span-4 lg:sticky lg:top-24 lg:self-start">
               <BlogSidebar currentPost={formattedBlog} allPosts={formattedAllBlogs} />
-            </div>
+            </aside>
           </div>
         </div>
       </article>

@@ -27,6 +27,13 @@ export default async function BlogPage() {
   const featuredBlog = blogPosts.find((b) => b.featured) || blogPosts[0];
   const otherBlogs = blogPosts.filter((b: { slug: string }) => b.slug !== featuredBlog?.slug);
 
+  const formatAuthor = (authorName: string | null) => {
+    if (!authorName || authorName === "Wood Glazer Team" || authorName === "Wood Glazer Admin" || authorName === "admin") {
+      return "Team Wood Glazer";
+    }
+    return authorName;
+  };
+
   return (
     <main className="min-h-screen pb-16 bg-white">
       <StructuredData
@@ -38,7 +45,7 @@ export default async function BlogPage() {
             description: b.description || "",
             image: b.image || "",
             date: b.created_at || "",
-            author: b.author || "Wood Glazer Team",
+            author: formatAuthor(b.author),
             category: b.category || "General",
             readTime: b.read_time || "",
             content: b.content || "",

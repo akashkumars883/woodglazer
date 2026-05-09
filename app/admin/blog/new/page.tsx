@@ -320,7 +320,7 @@ export default function NewBlogPostPage() {
                     <User className="w-6 h-6" />
                   </div>
                   <div>
-                    <p className="text-stone-900 font-bold">{author || "Wood Glazer Team"}</p>
+                    <p className="text-stone-900 font-bold">{author || "Team Wood Glazer"}</p>
                     <p className="text-stone-500 text-sm">Published on {new Date().toLocaleDateString()}</p>
                   </div>
                 </div>
