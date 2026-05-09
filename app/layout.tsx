@@ -6,6 +6,7 @@ import { siteConfig } from "@/lib/site";
 import "./globals.css";
 import SiteLayoutWrapper from "@/components/SiteLayoutWrapper";
 import { Toaster } from "sonner";
+import Script from "next/script";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -88,9 +89,29 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const gaId = "G-GHH86XW9XG";
+
   return (
     <html lang="en" className={`${outfit.variable} h-full antialiased`} suppressHydrationWarning>
       <body className="min-h-full bg-background text-foreground" suppressHydrationWarning>
+        {gaId && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+              strategy="afterInteractive"
+            />
+            <Script id="google-analytics" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${gaId}', {
+                  page_path: window.location.pathname,
+                });
+              `}
+            </Script>
+          </>
+        )}
         <StructuredData
           id="global-structured-data"
           data={[createOrganizationNode(), createWebsiteNode()]}
