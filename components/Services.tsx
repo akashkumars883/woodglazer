@@ -32,7 +32,6 @@ function ServiceImage({
       alt={alt}
       fill
       priority={priority}
-      unoptimized
       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
       className="object-cover"
       placeholder="blur"
@@ -122,10 +121,15 @@ export default function Services() {
                   aria-label={`${service.title} sub-services`}
                 >
                   {(service.sub_services || []).map((subService: SubService, subServiceIndex: number) => (
-                    <FadeIn key={subService.slug} direction="right" delay={subServiceIndex * 0.05}>
+                    <FadeIn
+                      key={subService.slug}
+                      direction="right"
+                      delay={subServiceIndex * 0.05}
+                      className="min-w-[300px] max-w-[300px] shrink-0 block"
+                    >
                       <Link
                         href={`/services/${service.slug}/${subService.slug}`}
-                        className="min-w-[300px] max-w-[300px] group/card overflow-hidden rounded-2xl bg-white shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1)] transition-all duration-500 hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.15)] hover:-translate-y-2"
+                        className="block w-full h-full group/card overflow-hidden rounded-2xl bg-white shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1)] transition-all duration-500 hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.15)] hover:-translate-y-2"
                       >
                         <div className="relative h-96 overflow-hidden">
                           <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 transition-opacity duration-500 group-hover/card:opacity-80" />

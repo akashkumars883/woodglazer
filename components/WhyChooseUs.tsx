@@ -67,7 +67,6 @@ export default function WhyChooseUs() {
               alt="Wood Glazer team performing precision carpentry and finishing work"
               fill
               priority
-              unoptimized
               sizes="(max-width: 768px) 100vw, 50vw"
               className="object-cover"
               placeholder="blur"

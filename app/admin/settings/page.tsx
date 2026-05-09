@@ -60,6 +60,7 @@ export default function SettingsPage() {
   }, [handleSync]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchSettings();
   }, [fetchSettings]);
 
@@ -104,44 +105,44 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto space-y-12 pb-20">
+    <div className="space-y-10">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="space-y-2">
-          <h1 className="text-5xl font-black text-secondary tracking-tight">Admin <span className="text-primary italic font-serif">Settings</span></h1>
-          <p className="text-stone-500 font-medium text-lg leading-relaxed">Manage your website&apos;s global identity, SEO, and contact details.</p>
+        <div>
+           <h1 className="text-3xl font-semibold text-secondary">Admin Settings</h1>
+           <p className="text-stone-500 font-medium">Manage your website&apos;s global identity, SEO, and contact details.</p>
         </div>
         
         <button 
           onClick={handleSync}
           disabled={saving === 'sync'}
-          className="flex items-center gap-3 bg-stone-100 px-6 py-4 rounded-2xl hover:bg-stone-200 transition-all group font-bold text-stone-600"
+          className="flex items-center gap-2 bg-stone-100 hover:bg-stone-200 px-4 py-2.5 rounded-xl font-semibold text-stone-600 transition-colors text-sm self-start sm:self-center"
         >
           {saving === 'sync' ? (
-            <Loader2 className="w-5 h-5 animate-spin text-primary" />
+            <Loader2 className="w-4 h-4 animate-spin text-primary" />
           ) : success === 'sync' ? (
-            <CheckCircle2 className="w-5 h-5 text-green-500" />
+            <CheckCircle2 className="w-4 h-4 text-green-500" />
           ) : (
-            <RefreshCw className="w-5 h-5 group-hover:rotate-180 transition-transform duration-500" />
+            <RefreshCw className="w-4 h-4 group-hover:rotate-180 transition-transform duration-500" />
           )}
-          <span>Sync Default Settings to DB</span>
+          <span>Sync Defaults to DB</span>
         </button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         
         {/* Basic Info */}
-        <section className="bg-white rounded-[2.5rem] border border-stone-200 p-8 sm:p-10 shadow-sm space-y-8">
-           <div className="flex items-center gap-4">
-              <div className="p-3 bg-stone-100 rounded-2xl text-stone-600"><Globe className="w-6 h-6" /></div>
-              <h2 className="text-2xl font-bold text-secondary">Site Identity</h2>
+        <section className="bg-white rounded-2xl border border-stone-200 p-6 shadow-sm space-y-6">
+           <div className="flex items-center gap-3">
+              <div className="p-2.5 bg-stone-50 rounded-xl text-stone-600"><Globe className="w-5 h-5" /></div>
+              <h2 className="text-lg font-semibold text-secondary">Site Identity</h2>
            </div>
 
-           <div className="space-y-6">
-              <div className="space-y-2">
-                <label className="text-xs font-black uppercase tracking-widest text-stone-400 ml-1">Site Name</label>
+           <div className="space-y-4">
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-stone-400 ml-1">Site Name</label>
                 <div className="relative">
                   <input 
-                    className="w-full bg-stone-50 border border-stone-200 rounded-2xl px-6 py-4 outline-none focus:ring-2 focus:ring-primary/10 transition-all font-bold text-secondary"
+                    className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary transition-all font-semibold text-secondary text-sm"
                     value={settings.name}
                     onChange={(e) => setSettings({ ...settings, name: e.target.value })}
                     onBlur={() => handleSave('name', settings.name)}
@@ -151,12 +152,12 @@ export default function SettingsPage() {
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <label className="text-xs font-black uppercase tracking-widest text-stone-400 ml-1">Site Description</label>
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-stone-400 ml-1">Site Description</label>
                 <div className="relative">
                   <textarea 
                     rows={4}
-                    className="w-full bg-stone-50 border border-stone-200 rounded-2xl px-6 py-4 outline-none focus:ring-2 focus:ring-primary/10 transition-all font-medium text-stone-600 resize-none"
+                    className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary transition-all font-medium text-stone-600 text-sm resize-none"
                     value={settings.description}
                     onChange={(e) => setSettings({ ...settings, description: e.target.value })}
                     onBlur={() => handleSave('description', settings.description)}
@@ -168,18 +169,18 @@ export default function SettingsPage() {
         </section>
 
         {/* Contact Info */}
-        <section className="bg-white rounded-[2.5rem] border border-stone-200 p-8 sm:p-10 shadow-sm space-y-8">
-           <div className="flex items-center gap-4">
-              <div className="p-3 bg-stone-100 rounded-2xl text-stone-600"><Phone className="w-6 h-6" /></div>
-              <h2 className="text-2xl font-bold text-secondary">Contact Details</h2>
+        <section className="bg-white rounded-2xl border border-stone-200 p-6 shadow-sm space-y-6">
+           <div className="flex items-center gap-3">
+              <div className="p-2.5 bg-stone-50 rounded-xl text-stone-600"><Phone className="w-5 h-5" /></div>
+              <h2 className="text-lg font-semibold text-secondary">Contact Details</h2>
            </div>
 
-           <div className="space-y-6">
-              <div className="space-y-2">
-                <label className="text-xs font-black uppercase tracking-widest text-stone-400 ml-1">Phone Number</label>
+           <div className="space-y-4">
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-stone-400 ml-1">Phone Number</label>
                 <div className="relative">
                   <input 
-                    className="w-full bg-stone-50 border border-stone-200 rounded-2xl px-6 py-4 outline-none focus:ring-2 focus:ring-primary/10 transition-all font-bold text-secondary"
+                    className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary transition-all font-semibold text-secondary text-sm"
                     value={settings.phone}
                     onChange={(e) => setSettings({ ...settings, phone: e.target.value })}
                     onBlur={() => handleSave('phone', settings.phone)}
@@ -188,11 +189,11 @@ export default function SettingsPage() {
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <label className="text-xs font-black uppercase tracking-widest text-stone-400 ml-1">WhatsApp Number</label>
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-stone-400 ml-1">WhatsApp Number</label>
                 <div className="relative">
                   <input 
-                    className="w-full bg-stone-50 border border-stone-200 rounded-2xl px-6 py-4 outline-none focus:ring-2 focus:ring-primary/10 transition-all font-bold text-secondary"
+                    className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary transition-all font-semibold text-secondary text-sm"
                     value={settings.whatsapp}
                     onChange={(e) => setSettings({ ...settings, whatsapp: e.target.value })}
                     onBlur={() => handleSave('whatsapp', settings.whatsapp)}
@@ -204,82 +205,82 @@ export default function SettingsPage() {
         </section>
 
         {/* SEO Keywords */}
-        <section className="bg-white rounded-[2.5rem] border border-stone-200 p-8 sm:p-10 shadow-sm space-y-8 lg:col-span-2">
+        <section className="bg-white rounded-2xl border border-stone-200 p-6 shadow-sm space-y-6 lg:col-span-2">
            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="p-3 bg-primary/10 rounded-2xl text-primary"><Hash className="w-6 h-6" /></div>
-                <h2 className="text-2xl font-bold text-secondary">SEO Keywords</h2>
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 bg-stone-50 rounded-xl text-stone-600"><Hash className="w-5 h-5" /></div>
+                <h2 className="text-lg font-semibold text-secondary">SEO Keywords</h2>
               </div>
-              <span className="text-[10px] font-black uppercase tracking-widest text-stone-400 bg-stone-100 px-3 py-1 rounded-full">{settings.keywords.length} keywords active</span>
+              <span className="text-[10px] font-bold px-2.5 py-1 rounded-full border bg-stone-50 text-stone-500 border-stone-100">{settings.keywords.length} keywords active</span>
            </div>
 
-           <div className="flex flex-wrap gap-3">
+           <div className="flex flex-wrap gap-2.5">
               {settings.keywords.map((word, idx) => (
-                <div key={idx} className="group flex items-center gap-2 bg-stone-50 border border-stone-100 px-4 py-2 rounded-xl transition-all hover:border-primary/20 hover:bg-white">
-                  <span className="text-sm font-bold text-stone-600">{word}</span>
+                <div key={idx} className="group flex items-center gap-1.5 bg-stone-50 border border-stone-100 px-3 py-1.5 rounded-xl transition-all hover:border-primary/20 hover:bg-white">
+                  <span className="text-xs font-semibold text-stone-600">{word}</span>
                   <button onClick={() => removeItem('keywords', idx)} className="text-stone-300 hover:text-red-500 transition-colors">
-                    <X className="w-4 h-4" />
+                    <X className="w-3.5 h-3.5" />
                   </button>
                 </div>
               ))}
-              <div className="flex items-center gap-2 bg-white border border-dashed border-stone-200 p-1 pl-4 rounded-xl focus-within:border-primary transition-all">
+              <div className="flex items-center gap-2 bg-white border border-dashed border-stone-200 p-1 pl-3 rounded-xl focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/10 transition-all">
                 <input 
-                  placeholder="Add new keyword..."
-                  className="bg-transparent text-sm font-bold outline-none border-none min-w-[150px]"
+                  placeholder="Add keyword..."
+                  className="bg-transparent text-xs font-semibold outline-none border-none max-w-[130px] text-secondary"
                   value={newKeyword}
                   onChange={(e) => setNewKeyword(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && addItem('keywords', newKeyword)}
                 />
                 <button 
                   onClick={() => addItem('keywords', newKeyword)}
-                  className="p-1.5 bg-primary text-white rounded-lg hover:scale-105 transition-transform"
+                  className="p-1 bg-primary text-white rounded-lg hover:scale-105 transition-transform"
                 >
-                  <Plus className="w-4 h-4" />
+                  <Plus className="w-3.5 h-3.5" />
                 </button>
               </div>
            </div>
         </section>
 
         {/* Service Cities */}
-        <section className="bg-white rounded-[2.5rem] border border-stone-200 p-8 sm:p-10 shadow-sm space-y-8 lg:col-span-2">
+        <section className="bg-white rounded-2xl border border-stone-200 p-6 shadow-sm space-y-6 lg:col-span-2">
            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="p-3 bg-secondary/10 rounded-2xl text-secondary"><MapPin className="w-6 h-6" /></div>
-                <h2 className="text-2xl font-bold text-secondary">Service Cities (Local SEO)</h2>
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 bg-stone-50 rounded-xl text-stone-600"><MapPin className="w-5 h-5" /></div>
+                <h2 className="text-lg font-semibold text-secondary">Service Cities (Local SEO)</h2>
               </div>
-              <span className="text-[10px] font-black uppercase tracking-widest text-stone-400 bg-stone-100 px-3 py-1 rounded-full">{settings.serviceArea.length} regions covered</span>
+              <span className="text-[10px] font-bold px-2.5 py-1 rounded-full border bg-stone-50 text-stone-500 border-stone-100">{settings.serviceArea.length} regions covered</span>
            </div>
 
-           <div className="flex flex-wrap gap-4">
+           <div className="flex flex-wrap gap-2.5">
               {settings.serviceArea.map((city, idx) => (
-                <div key={idx} className="flex items-center gap-3 bg-stone-900 text-white px-5 py-3 rounded-2xl shadow-lg shadow-stone-900/10 group">
-                  <MapPin className="w-4 h-4 text-primary" />
-                  <span className="text-sm font-black uppercase tracking-widest">{city}</span>
-                  <button onClick={() => removeItem('serviceArea', idx)} className="ml-2 p-1 hover:bg-white/10 rounded-full transition-colors">
+                <div key={idx} className="flex items-center gap-2 bg-stone-50 border border-stone-100 px-3.5 py-2 rounded-xl group hover:border-primary/20 transition-all">
+                  <MapPin className="w-3.5 h-3.5 text-primary" />
+                  <span className="text-xs font-semibold text-secondary">{city}</span>
+                  <button onClick={() => removeItem('serviceArea', idx)} className="text-stone-300 hover:text-red-500 transition-colors">
                     <X className="w-3.5 h-3.5" />
                   </button>
                 </div>
               ))}
-              <div className="flex items-center gap-2 bg-white border-2 border-dashed border-stone-100 p-1 pl-6 rounded-2xl focus-within:border-primary transition-all">
+              <div className="flex items-center gap-2 bg-white border border-dashed border-stone-200 p-1 pl-3 rounded-xl focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/10 transition-all">
                 <input 
                   placeholder="New region..."
-                  className="bg-transparent text-sm font-black uppercase tracking-[0.2em] outline-none border-none"
+                  className="bg-transparent text-xs font-semibold outline-none border-none max-w-[130px] text-secondary"
                   value={newCity}
                   onChange={(e) => setNewCity(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && addItem('serviceArea', newCity)}
                 />
                 <button 
                   onClick={() => addItem('serviceArea', newCity)}
-                  className="p-2 bg-primary text-white rounded-xl hover:bg-stone-900 transition-colors"
+                  className="p-1 bg-primary text-white rounded-lg hover:scale-105 transition-transform"
                 >
-                  <Plus className="w-5 h-5" />
+                  <Plus className="w-3.5 h-3.5" />
                 </button>
               </div>
            </div>
            
-           <div className="bg-orange-50 border border-orange-100 p-6 rounded-2xl flex gap-4">
+           <div className="bg-orange-50/50 border border-orange-100 p-4 rounded-xl flex gap-3">
               <AlertCircle className="w-5 h-5 text-orange-500 shrink-0" />
-              <p className="text-orange-700 text-sm font-medium italic">
+              <p className="text-orange-700 text-xs font-medium leading-relaxed">
                 Tip: Adding more cities here will automatically update your sitemap and JSON-LD schema, 
                 improving your visibility in those specific regions.
               </p>

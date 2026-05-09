@@ -27,7 +27,6 @@ export default function PageHero({
           fill
           priority
           className="object-cover opacity-40 scale-105"
-          unoptimized
         />
         <div className="absolute inset-0 bg-gradient-to-t from-stone-850 via-stone-850/30 to-transparent" />
       </div>

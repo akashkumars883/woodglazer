@@ -120,7 +120,6 @@ export default async function NestedServicePage({
             alt={subService.title}
             fill
             className="object-cover opacity-60 scale-105"
-            unoptimized
             priority
           />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.4)_100%)] z-10" />
@@ -145,7 +144,7 @@ export default async function NestedServicePage({
 
 
       {/* Main Content Section */}
-      <section className="relative py-20 sm:py-32 overflow-hidden">
+      <section className="relative py-10 sm:py-10 overflow-hidden">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
 
@@ -153,12 +152,15 @@ export default async function NestedServicePage({
             <div className="lg:col-span-12 xl:col-span-7 space-y-12">
               <div className="space-y-6">
                 <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-secondary leading-tight">
-                  Premium <span className="text-primary italic font-serif">Solutions</span> for Your {parentService.slug === 'wallpaper-and-interior-panels' ? 'Walls' : 'Wood'}
+                  Premium <span>Solutions</span> for Your {parentService.slug === 'wallpaper-and-interior-panels' ? 'Walls' : 'Wood'}
                 </h2>
                 <div className="w-20 h-1.5 bg-primary rounded-full" />
-                <p className="text-lg sm:text-xl text-stone-600 leading-relaxed font-medium">
-                  {subService.details || subService.description}
-                </p>
+                <div 
+                  className="text-lg sm:text-xl text-stone-600 leading-relaxed font-medium space-y-6"
+                  dangerouslySetInnerHTML={{
+                    __html: (subService.details || subService.description || "").replace(/\n/g, "<br />")
+                  }}
+                />
               </div>
 
               {/* Core Benefits Grid */}
@@ -189,7 +191,7 @@ export default async function NestedServicePage({
               <div className="p-10 bg-secondary rounded-3xl text-white shadow-2xl overflow-hidden relative group">
                 <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-64 h-64 bg-primary/20 rounded-full blur-3xl" />
                 <div className="relative z-10 space-y-8">
-                  <h3 className="text-3xl font-bold">Ready to <span className="text-primary italic font-serif">Transform</span> Your Space?</h3>
+                  <h3 className="text-3xl font-bold">Ready to <span>Transform</span> Your Space?</h3>
                   <p className="text-stone-300 font-medium">Get expert consultation and a personalized quote for your project today.</p>
                   <Link
                     href="/contact"
@@ -249,7 +251,7 @@ export default async function NestedServicePage({
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-12">
             <div className="space-y-2">
-              <h2 className="text-3xl font-bold text-secondary italic">Similar Services</h2>
+              <h2 className="text-3xl font-bold text-secondary">Similar Services</h2>
               <p className="text-stone-500 font-medium tracking-wide">Explore more specialties within {parentService.title}</p>
             </div>
             <Link href={`/services/${parentService.slug}`} className="text-primary font-bold text-sm uppercase tracking-widest hover:underline hidden sm:block">View All</Link>
@@ -263,15 +265,14 @@ export default async function NestedServicePage({
                 <Link
                   key={item.slug}
                   href={`/services/${parentService.slug}/${item.slug}`}
-                  className="rounded-3xl bg-white p-5 shadow-sm transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 group flex flex-col h-full"
+                  className="rounded-2xl bg-white p-5 shadow-sm transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 group flex flex-col h-full"
                 >
-                  <div className="relative aspect-[4/3] mb-6 overflow-hidden rounded-2xl">
+                  <div className="relative aspect-[4/3] mb-6 overflow-hidden rounded-xl">
                     <Image
                       src={item.image}
                       alt={item.title}
                       fill
                       className="object-cover transition-transform duration-700 group-hover:scale-110"
-                      unoptimized
                     />
                   </div>
                   <h3 className="font-bold text-lg text-secondary group-hover:text-primary transition-colors mb-2">{item.title}</h3>

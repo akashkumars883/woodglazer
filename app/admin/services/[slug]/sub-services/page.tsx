@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import ImageUploader from "@/components/admin/ImageUploader";
 import { saveService, deleteService } from "../../../actions";
 import { supabase } from "@/lib/supabase";
 
@@ -33,6 +34,7 @@ interface SubService {
   seo_keywords?: string[];
   created_at?: string;
   parent_id?: string;
+  details?: string;
 }
 
 interface Category {
@@ -60,7 +62,8 @@ export default function SubServicesPage() {
     seo_title: "",
     seo_description: "",
     seo_keywords: [] as string[],
-    gallery: [] as string[]
+    gallery: [] as string[],
+    details: ""
   });
 
   const [editingSub, setEditingSub] = useState<SubService | null>(null);
@@ -125,7 +128,8 @@ export default function SubServicesPage() {
         seo_title: "",
         seo_description: "",
         seo_keywords: [],
-        gallery: []
+        gallery: [],
+        details: ""
       });
       fetchData();
     } else {
@@ -240,15 +244,11 @@ export default function SubServicesPage() {
                     onChange={(e) => setNewSub({ ...newSub, slug: e.target.value })}
                  />
               </div>
-              <div className="md:col-span-2 space-y-3">
-                 <label className="text-xs font-black uppercase tracking-widest text-stone-400">Image URL</label>
-                 <input
-                    required
-                    type="text"
-                    placeholder="https://..."
-                    className="w-full bg-stone-50 border border-stone-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary/20 outline-none"
+              <div className="md:col-span-2">
+                 <ImageUploader 
                     value={newSub.image}
-                    onChange={(e) => setNewSub({ ...newSub, image: e.target.value })}
+                    onChange={(url) => setNewSub({ ...newSub, image: url })}
+                    label="Specialty Image"
                  />
               </div>
               <div className="md:col-span-2 space-y-3">
@@ -259,6 +259,16 @@ export default function SubServicesPage() {
                     className="w-full bg-stone-50 border border-stone-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary/20 outline-none resize-none"
                     value={newSub.description}
                     onChange={(e) => setNewSub({ ...newSub, description: e.target.value })}
+                 />
+              </div>
+              <div className="md:col-span-2 space-y-3">
+                 <label className="text-xs font-black uppercase tracking-widest text-stone-400">Detailed Content (Long Description)</label>
+                 <textarea
+                    placeholder="Describe the service details, application process, etc. HTML tags or plain text are supported."
+                    rows={5}
+                    className="w-full bg-stone-50 border border-stone-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary/20 outline-none resize-none"
+                    value={newSub.details || ""}
+                    onChange={(e) => setNewSub({ ...newSub, details: e.target.value })}
                  />
               </div>
               <div className="md:col-span-2 pt-4">
@@ -304,23 +314,66 @@ export default function SubServicesPage() {
                        onChange={(e) => setEditingSub({ ...editingSub, slug: e.target.value })}
                     />
                  </div>
-                 <div className="md:col-span-2 space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-stone-400">Main Image URL</label>
-                    <input 
-                       className="w-full bg-stone-50 border border-stone-200 rounded-2xl px-6 py-4 outline-none"
+                 <div className="md:col-span-2">
+                    <ImageUploader 
                        value={editingSub.image}
-                       onChange={(e) => setEditingSub({ ...editingSub, image: e.target.value })}
+                       onChange={(url) => setEditingSub({ ...editingSub, image: url })}
+                       label="Specialty Image"
                     />
                  </div>
-                 <div className="md:col-span-2 space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-stone-400">Description</label>
-                    <textarea 
-                       rows={3}
-                       className="w-full bg-stone-50 border border-stone-200 rounded-2xl px-6 py-4 outline-none resize-none"
-                       value={editingSub.description}
-                       onChange={(e) => setEditingSub({ ...editingSub, description: e.target.value })}
-                    />
-                 </div>
+                  <div className="md:col-span-2 space-y-2">
+                     <label className="text-[10px] font-black uppercase tracking-widest text-stone-400">Description</label>
+                     <textarea 
+                        rows={3}
+                        className="w-full bg-stone-50 border border-stone-200 rounded-2xl px-6 py-4 outline-none resize-none"
+                        value={editingSub.description}
+                        onChange={(e) => setEditingSub({ ...editingSub, description: e.target.value })}
+                     />
+                  </div>
+
+                  <div className="md:col-span-2 space-y-2">
+                     <label className="text-[10px] font-black uppercase tracking-widest text-stone-400">Detailed Content (Long Description)</label>
+                     <textarea 
+                        rows={6}
+                        placeholder="Describe the service details, application process, etc. HTML tags or plain text are supported."
+                        className="w-full bg-stone-50 border border-stone-200 rounded-2xl px-6 py-4 outline-none resize-none"
+                        value={editingSub.details || ""}
+                        onChange={(e) => setEditingSub({ ...editingSub, details: e.target.value })}
+                     />
+                  </div>
+
+                  <div className="md:col-span-2 space-y-3">
+                     <label className="text-[10px] font-black uppercase tracking-widest text-stone-400">Key Advantages (Features)</label>
+                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {(editingSub.features || []).map((feature, idx) => (
+                           <div key={idx} className="flex gap-2 items-center">
+                              <input 
+                                 className="flex-1 bg-stone-50 border border-stone-200 rounded-xl px-4 py-3 text-sm outline-none font-bold text-stone-700"
+                                 value={feature}
+                                 onChange={(e) => {
+                                    const updatedFeatures = [...(editingSub.features || [])];
+                                    updatedFeatures[idx] = e.target.value;
+                                    setEditingSub({ ...editingSub, features: updatedFeatures });
+                                 }}
+                              />
+                              <button 
+                                 type="button"
+                                 onClick={() => setEditingSub({ ...editingSub, features: (editingSub.features || []).filter((_, i) => i !== idx) })}
+                                 className="p-2 bg-red-50 text-red-500 rounded-xl hover:bg-red-100 transition-colors"
+                              >
+                                 <X className="w-4 h-4" />
+                              </button>
+                           </div>
+                        ))}
+                        <button 
+                           type="button"
+                           onClick={() => setEditingSub({ ...editingSub, features: [...(editingSub.features || []), "New Advantage"] })}
+                           className="border border-dashed border-primary/20 hover:border-primary text-primary font-bold text-sm rounded-xl py-3 transition-colors"
+                        >
+                           + Add Advantage
+                        </button>
+                     </div>
+                  </div>
 
                  <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-8 border-t border-stone-100 pt-8">
                     <div className="space-y-6">
@@ -332,8 +385,7 @@ export default function SubServicesPage() {
                                   src={img} 
                                   alt={`Gallery image ${i + 1}`}
                                   fill
-                                  className="object-cover"
-                                  unoptimized 
+                                  className="object-cover" 
                                 />
                                 <button 
                                   type="button"
@@ -344,16 +396,17 @@ export default function SubServicesPage() {
                                 </button>
                              </div>
                           ))}
-                          <div className="border border-dashed border-stone-200 rounded-xl flex items-center justify-center p-2">
-                             <input 
-                               placeholder="Paste Image URL..."
-                               className="w-full bg-transparent text-[10px] outline-none"
-                               onBlur={(e) => {
-                                  if (e.target.value) {
-                                     setEditingSub({ ...editingSub, gallery: [...(editingSub.gallery || []), e.target.value] });
-                                     e.target.value = "";
-                                  }
-                               }}
+                          
+                          <div className="border border-dashed border-stone-200 rounded-xl p-3 space-y-2">
+                             <p className="text-[10px] font-black uppercase text-stone-400">Upload Image</p>
+                             <ImageUploader 
+                                value=""
+                                onChange={(url) => {
+                                   if (url) {
+                                      setEditingSub({ ...editingSub, gallery: [...(editingSub.gallery || []), url] });
+                                   }
+                                }}
+                                label="Add Photo"
                              />
                           </div>
                        </div>
@@ -408,7 +461,6 @@ export default function SubServicesPage() {
                           alt={sub.title} 
                           fill
                           className="object-cover group-hover:scale-110 transition-transform duration-700"
-                          unoptimized
                         />
                      ) : (
                         <div className="w-full h-full flex items-center justify-center"><Package className="w-8 h-8 text-stone-200" /></div>

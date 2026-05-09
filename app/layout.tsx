@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { StructuredData } from "@/components/StructuredData";
-import { Outfit, Cormorant_Garamond } from "next/font/google";
+import { Outfit } from "next/font/google";
 import { createOrganizationNode, createWebsiteNode } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
 import "./globals.css";
@@ -13,12 +13,7 @@ const outfit = Outfit({
   display: "swap",
 });
 
-const cormorant = Cormorant_Garamond({
-  variable: "--font-cormorant",
-  subsets: ["latin"],
-  display: "swap",
-  weight: ["300", "400", "500", "600", "700"],
-});
+
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -94,8 +89,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${outfit.variable} ${cormorant.variable} h-full antialiased`}>
-      <body className="min-h-full bg-background text-foreground">
+    <html lang="en" className={`${outfit.variable} h-full antialiased`} suppressHydrationWarning>
+      <body className="min-h-full bg-background text-foreground" suppressHydrationWarning>
         <StructuredData
           id="global-structured-data"
           data={[createOrganizationNode(), createWebsiteNode()]}

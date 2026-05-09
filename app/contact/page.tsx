@@ -1,5 +1,6 @@
 import GetInTouch from "@/components/GetInTouch";
-import { Mail, MapPin, Phone, Clock } from "lucide-react";
+import { Mail, MapPin, Phone, Clock, FileText, Map, Hammer, CheckCircle } from "lucide-react";
+import FAQ from "@/components/FAQ";
 import { buildMetadata } from "@/lib/seo";
 import { FadeIn, FadeInStagger } from "@/components/Motion";
 import PageHero from "@/components/PageHero";
@@ -28,7 +29,7 @@ export default function ContactPage() {
             <div className="lg:col-span-5">
                <FadeInStagger className="space-y-12">
                   <FadeIn>
-                    <h2 className="text-4xl font-display font-medium text-secondary mb-6">Get In Touch</h2>
+                    <h2 className="text-4xl sm:text-5xl font-display font-medium text-secondary mb-6">Get In Touch</h2>
                     <p className="text-stone-500 font-medium max-w-md leading-relaxed text-lg">Reach out to us via any of these channels. Our team typically responds within 24 business hours.</p>
                   </FadeIn>
 
@@ -78,8 +79,38 @@ export default function ContactPage() {
         </div>
       </section>
 
+      {/* What Happens Next */}
+      <section className="py-24 sm:py-32 bg-stone-200">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <FadeIn className="text-center mb-16">
+            <span className="text-xs font-bold uppercase tracking-[0.3em] text-primary mb-3 block">Simple Workflow</span>
+            <h2 className="text-4xl sm:text-5xl font-display font-medium text-secondary">What Happens Next?</h2>
+            <p className="text-stone-500 mt-6 font-medium max-w-2xl mx-auto text-lg">Our streamlined 4-step process ensures a smooth, transparent experience from your initial inquiry to project completion.</p>
+          </FadeIn>
+          
+          <FadeInStagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              { icon: FileText, title: "1. Initial Estimate", desc: "Share your requirements via form or WhatsApp. We provide a preliminary estimate based on your details." },
+              { icon: Map, title: "2. Site Inspection", desc: "Our experts visit your location to assess the wood condition, measure areas, and finalize the exact scope." },
+              { icon: Hammer, title: "3. Execution", desc: "Our master craftsmen begin the surface prep and polishing process using premium, eco-friendly materials." },
+              { icon: CheckCircle, title: "4. Handover", desc: "We conduct a thorough final inspection with you to ensure a flawless, glass-like finish before handover." }
+            ].map((step, i) => (
+              <FadeIn key={step.title} className="bg-white p-8 rounded-[2rem] border border-stone-100 shadow-sm hover:shadow-xl transition-all relative group">
+                 <div className="w-16 h-16 rounded-2xl bg-stone-50 flex items-center justify-center text-primary mb-6 group-hover:scale-110 transition-transform group-hover:bg-primary group-hover:text-white">
+                    <step.icon className="w-8 h-8" />
+                 </div>
+                 <h3 className="text-xl font-display font-bold text-secondary mb-3">{step.title}</h3>
+                 <p className="text-stone-500 text-sm leading-relaxed">{step.desc}</p>
+              </FadeIn>
+            ))}
+          </FadeInStagger>
+        </div>
+      </section>
+
+      <FAQ />
+
       {/* Map Section */}
-      <section className="pb-24 sm:pb-40 px-4 sm:px-6 lg:px-8">
+      <section className="py-24 sm:py-40 px-4 sm:px-6 lg:px-8 bg-white">
         <FadeIn>
           <div className="mx-auto max-w-7xl overflow-hidden rounded-[3rem] shadow-2xl relative group h-[600px]">
             <iframe

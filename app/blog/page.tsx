@@ -5,6 +5,7 @@ import { buildMetadata, createBlogIndexNode, createBreadcrumbNode } from "@/lib/
 import { StructuredData } from "@/components/StructuredData";
 import { getDynamicSiteConfig } from "@/lib/site";
 import PageHero from "@/components/PageHero";
+import { type BlogPost } from "@/lib/blogData";
 
 export async function generateMetadata() {
   const config = await getDynamicSiteConfig();
@@ -31,12 +32,18 @@ export default async function BlogPage() {
       <StructuredData
         id="blog-listing-data"
         data={[
-          createBlogIndexNode((blogPosts || []).map((b: any) => ({
-            ...b,
-            date: b.created_at,
-            readTime: b.read_time,
-            content: b.content || ""
-          }))),
+          createBlogIndexNode((blogPosts || []).map((b) => ({
+            title: b.title || "",
+            slug: b.slug || "",
+            description: b.description || "",
+            image: b.image || "",
+            date: b.created_at || "",
+            author: b.author || "Wood Glazer Team",
+            category: b.category || "General",
+            readTime: b.read_time || "",
+            content: b.content || "",
+            featured: b.featured,
+          } as BlogPost))),
           createBreadcrumbNode([
             { name: "Home", path: "/" },
             { name: "Blog", path: "/blog" },
@@ -49,20 +56,19 @@ export default async function BlogPage() {
         backgroundImage="https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?auto=format&fit=crop&q=80"
       />
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-16 sm:pt-24">
         {/* Featured Post */}
         {featuredBlog && (
           <section className="mb-16 ">
             <Link href={`/blog/${featuredBlog.slug}`} className="group block">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center bg-white rounded-lg overflow-hidden border border-stone-200 shadow-sm transition-all hover:shadow-xl hover:border-primary/20">
-                <div className="relative aspect-[16/9] lg:aspect-square overflow-hidden">
+                <div className="relative aspect-[14/9] lg:aspect-[1.5/1] overflow-hidden">
                   <Image
                     alt={featuredBlog.title}
                     src={featuredBlog.image}
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                     priority
-                    unoptimized
                   />
                   <div className="absolute top-4 left-4">
                     <span className="bg-primary text-white px-3 py-1 rounded-full text-sm font-medium shadow-lg">
@@ -70,7 +76,7 @@ export default async function BlogPage() {
                     </span>
                   </div>
                 </div>
-                <div className="p-8 lg:p-12">
+                <div className="p-8 lg:p-10">
                   <div className="flex items-center gap-3 text-sm text-stone-500 mb-4 font-medium uppercase tracking-wider">
                     <span>{featuredBlog.category}</span>
                     <span>•</span>
@@ -97,7 +103,7 @@ export default async function BlogPage() {
         {/* Other Posts Grid */}
         <section>
           <div className="flex items-center justify-between mb-8 mt-10">
-            <h2 className="text-2xl font-bold text-stone-900">Latest Articles</h2>
+            <h2 className="text-3xl font-bold text-secondary flex items-center gap-4">Latest Insights & updates</h2>
             <div className="h-px flex-1 bg-stone-200 ml-6 hidden sm:block"></div>
           </div>
           
@@ -110,7 +116,6 @@ export default async function BlogPage() {
                     src={blog.image}
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    unoptimized
                   />
                   <div className="absolute top-4 left-4">
                     <span className="bg-white/90 backdrop-blur-sm text-stone-900 px-3 py-1 rounded-full text-xs font-semibold shadow-sm">
@@ -119,7 +124,7 @@ export default async function BlogPage() {
                   </div>
                 </div>
                 <div className="p-6 flex flex-col flex-1">
-                  <span className="text-xs text-stone-500 mb-2 font-medium uppercase tracking-wider">
+                  <span className="text-xs text-stone-500 mb-2 font-medium uppercase tracking-wider" suppressHydrationWarning>
                     {new Date(blog.created_at).toLocaleDateString()} • {blog.read_time}
                   </span>
                   <h3 className="text-xl font-bold text-stone-900 mb-3 group-hover:text-primary transition-colors leading-snug line-clamp-2">

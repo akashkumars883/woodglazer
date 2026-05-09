@@ -1,5 +1,6 @@
 import Image from "next/image";
 import WhyChooseUs from "@/components/WhyChooseUs";
+import Testimonials from "@/components/Testimonials";
 import CTASection from "@/components/CTASection";
 import { buildMetadata } from "@/lib/seo";
 import { FadeIn, FadeInStagger } from "@/components/Motion";
@@ -29,7 +30,6 @@ export default function AboutPage() {
                 alt="Wood Glazer Craftsmanship"
                 fill
                 className="object-cover"
-                unoptimized
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
               <div className="absolute bottom-10 left-10 text-white">
@@ -39,7 +39,7 @@ export default function AboutPage() {
             
             <FadeInStagger className="space-y-10">
               <FadeIn>
-                <p className="text-sm font-black uppercase tracking-[0.3em] text-primary mb-4">
+                <p className="text-sm font-semibold uppercase tracking-[0.3em] text-primary mb-4">
                   Our Philosophy
                 </p>
                 <h2 className="text-4xl sm:text-5xl font-display font-medium text-secondary leading-tight">
@@ -49,7 +49,7 @@ export default function AboutPage() {
               
               <FadeIn>
                 <p className="text-lg text-stone-600 leading-relaxed font-medium">
-                  At Wood Glazer, we don't just "polish" wood; we restore its soul. Whether it's a centuries-old heirloom or a modern architectural masterpiece, our team of master craftsmen treats every surface with the reverence it deserves.
+                  At Wood Glazer, we don&apos;t just &quot;polish&quot; wood; we restore its soul. Every knot, grain, and texture tells a story, and our mission is to bring that story to life with unmatched brilliance. <br /> Wherther it&apos;s a centuries-old heirloom passed down through generations or a modern architectural masterpice, our team of master craftmen treats every surface with the reverence it deserves. We bridge the gap between raw natural beauty and refined luxury.&apos;<br />
                 </p>
               </FadeIn>
 
@@ -91,6 +91,44 @@ export default function AboutPage() {
 
       <WhyChooseUs />
 
+      {/* Why We Are Different */}
+      <section className="py-24 sm:py-32">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <FadeIn className="text-center max-w-3xl mx-auto mb-16">
+            <h2 className="text-4xl sm:text-5xl font-display font-medium text-secondary mb-6">
+              Why We Are <span className="text-primary italic">Different</span>
+            </h2>
+            <p className="text-lg text-stone-600 font-medium">
+              We go beyond standard painting and polishing. Our approach combines traditional artisanal methods with modern technology to deliver a finish that is truly unmatched.
+            </p>
+          </FadeIn>
+          <FadeInStagger className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                title: "Artisanal Craftsmanship",
+                desc: "Every project is handled by master artisans who understand the unique character of different wood species, ensuring the natural grain is enhanced, not hidden.",
+              },
+              {
+                title: "Advanced Technology",
+                desc: "We use dust-free sanding machines, premium European spray guns, and climate-controlled curing processes to achieve a flawless, glass-like finish.",
+              },
+              {
+                title: "Tailored Solutions",
+                desc: "No two pieces of wood are the same. We customize our polishing compounds, stains, and application techniques specifically for each project's requirements.",
+              }
+            ].map((feature, i) => (
+              <FadeIn key={i} className="bg-white p-10 rounded-3xl border border-stone-100 shadow-sm hover:shadow-xl hover:border-primary/20 transition-all group">
+                <div className="w-12 h-12 bg-stone-50 rounded-2xl flex items-center justify-center mb-6 text-primary font-display text-xl font-bold group-hover:bg-primary group-hover:text-white transition-colors">
+                  0{i + 1}
+                </div>
+                <h3 className="text-xl font-display font-bold text-secondary mb-4">{feature.title}</h3>
+                <p className="text-stone-500 leading-relaxed text-sm">{feature.desc}</p>
+              </FadeIn>
+            ))}
+          </FadeInStagger>
+        </div>
+      </section>
+
       {/* Vision & Mission - Reimagined */}
       <section className="py-24 sm:py-40 bg-stone-50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -114,6 +152,8 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+
+      <Testimonials />
 
       <CTASection />
     </main>

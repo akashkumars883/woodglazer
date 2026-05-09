@@ -12,6 +12,7 @@ import {
   Users
 } from "lucide-react";
 
+import Image from "next/image";
 import { useState } from "react";
 import { logoutAdmin } from "./actions";
 import { useRouter } from "next/navigation";
@@ -60,23 +61,40 @@ export default function AdminLayout({
 
       <Toaster position="top-right" richColors closeButton />
 
-      {/* Smart Hover Sidebar */}
+      {/* Smart Hover Sidebar - Premium Light Theme */}
       <aside
         className={`
-          fixed inset-y-0 left-0 z-40 bg-stone-900 text-stone-400 
-          transition-all duration-500 ease-in-out group shadow-2xl
+          fixed inset-y-0 left-0 z-40 bg-white border-r border-border text-stone-500 
+          transition-all duration-500 ease-in-out group shadow-sm
           w-24 hover:w-72
         `}
       >
         <div className="h-full flex flex-col p-6 overflow-hidden">
           {/* Logo Section */}
-          <div className="flex items-center gap-4 mb-12 px-2 overflow-hidden">
-            <div className="w-10 h-10 rounded-xl bg-primary flex-shrink-0 flex items-center justify-center text-white font-black shadow-lg shadow-primary/20">
-              A
+          <div className="relative h-12 w-full flex items-center mb-12 px-1 overflow-hidden select-none">
+            {/* Closed State: Custom Woodwork/Paint Brand Icon */}
+            <div className="absolute left-1.5 top-1/2 -translate-y-1/2 w-10 h-10 transition-all duration-500 group-hover:opacity-0 group-hover:scale-75 opacity-100 scale-100 flex items-center justify-center overflow-hidden">
+              <Image
+                src="/brand/admin-logo-icon.jpg"
+                alt="Logo Icon"
+                width={100}
+                height={100}
+                className="w-full h-full object-cover rounded-lg"
+                unoptimized
+              />
             </div>
-            <span className="text-xl font-bold text-white tracking-widest opacity-0 group-hover:opacity-100 transition-opacity duration-500 whitespace-nowrap">
-              Admin Panel
-            </span>
+
+            {/* Expanded State: Full Brand Logo in Original Colors */}
+            <div className="absolute left-0 top-1/2 -translate-y-1/2 transition-all duration-500 opacity-0 scale-95 translate-x-4 group-hover:translate-x-0 group-hover:opacity-100 group-hover:scale-100">
+              <Image
+                src="/brand/wood-glazer-logo.png"
+                alt="Wood Glazer"
+                width={130}
+                height={36}
+                className="h-8 w-auto object-contain"
+                unoptimized
+              />
+            </div>
           </div>
 
           {/* Navigation */}
@@ -88,10 +106,10 @@ export default function AdminLayout({
                   key={item.name}
                   href={item.href}
                   className={`
-                    flex items-center gap-4 px-3.5 py-3 rounded-lg transition-all duration-300
+                    flex items-center gap-4 px-3.5 py-3 rounded-xl transition-all duration-300
                     ${isActive
-                      ? "bg-primary text-white font-semibold"
-                      : "hover:bg-white/5 hover:text-white"
+                      ? "bg-secondary text-white font-semibold shadow-md shadow-secondary/10"
+                      : "hover:bg-surface hover:text-secondary text-stone-600"
                     }
                   `}
                 >
@@ -105,10 +123,10 @@ export default function AdminLayout({
           </nav>
 
           {/* Bottom Actions */}
-          <div className="pt-6 border-t border-white/5 mt-auto space-y-3">
+          <div className="pt-6 border-t border-border mt-auto space-y-3">
             <Link
               href="/"
-              className="flex items-center gap-4 px-3 py-4 rounded-2xl hover:bg-white/5 hover:text-white transition-all duration-300 group/link"
+              className="flex items-center gap-4 px-3 py-4 rounded-2xl hover:bg-surface hover:text-secondary text-stone-600 transition-all duration-300 group/link"
             >
               <Home className="w-6 h-6 flex-shrink-0 group-hover/link:text-primary transition-colors" />
               <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap font-medium">
@@ -118,7 +136,7 @@ export default function AdminLayout({
             <button
               onClick={handleLogout}
               disabled={loggingOut}
-              className="w-full flex items-center gap-4 px-3 py-4 rounded-2xl hover:bg-red-500/10 hover:text-red-500 transition-all duration-300 disabled:opacity-50"
+              className="w-full flex items-center gap-4 px-3 py-4 rounded-2xl hover:bg-red-500/5 hover:text-red-600 text-stone-600 transition-all duration-300 disabled:opacity-50"
             >
               <LogOut className={`w-6 h-6 flex-shrink-0 ${loggingOut ? 'animate-spin' : ''}`} />
               <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap font-medium">
@@ -135,17 +153,16 @@ export default function AdminLayout({
 
         {/* Dynamic Page Header */}
         <header className="h-20 lg:h-24 bg-white border-b border-stone-100 sticky top-0 z-30 flex items-center px-8 lg:px-12 justify-between backdrop-blur-md bg-white/80">
-          <div className="flex items-center gap-4">
-            <div className="w-2 rounded-full h-8 bg-primary/20" />
-            <h2 className="text-xl font-black text-secondary tracking-tight">
+          <div className="flex items-center">
+            <h2 className="text-xl font-semibold text-secondary tracking-tight">
               {adminNavigation.find(n => n.href === pathname)?.name || "Dashboard"}
             </h2>
           </div>
 
           <div className="flex items-center gap-6">
             <div className="hidden sm:flex flex-col text-right">
-              <p className="text-sm font-black text-secondary leading-none">Admin User</p>
-              <p className="text-[10px] text-stone-400 font-bold uppercase tracking-widest mt-1">Super Admin</p>
+              <p className="text-sm font-semibold text-secondary leading-none">Admin User</p>
+              <p className="text-[12px] text-stone-400 font-semibold">Super Admin</p>
             </div>
             <div className="w-12 h-12 rounded-2xl bg-stone-100 flex items-center justify-center text-secondary font-black border border-stone-200 shadow-sm transition-transform hover:scale-105 cursor-pointer">
               A

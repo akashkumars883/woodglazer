@@ -9,6 +9,7 @@ import { buildMetadata } from "@/lib/seo";
 import CTASection from "@/components/CTASection";
 
 import { getDynamicSiteConfig } from "@/lib/site";
+import { incrementVisitorCount } from "@/app/admin/actions";
 
 export async function generateMetadata() {
   const config = await getDynamicSiteConfig();
@@ -21,7 +22,10 @@ export async function generateMetadata() {
 }
 
 
-export default function HomePage() {
+export default async function HomePage() {
+  // Record actual public visitor hit in database
+  await incrementVisitorCount();
+
   return (
     <main className="min-h-screen">
       <Hero />

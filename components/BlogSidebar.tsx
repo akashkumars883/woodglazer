@@ -5,6 +5,7 @@ import { ChevronRight, Mail, Phone, Calendar, Clock } from "lucide-react";
 
 type BlogSidebarProps = {
   currentPost: BlogPost;
+  allPosts?: BlogPost[];
 };
 
 function SidebarContactForm() {
@@ -78,14 +79,16 @@ function SidebarContactForm() {
   );
 }
 
-export default function BlogSidebar({ currentPost }: BlogSidebarProps) {
+export default function BlogSidebar({ currentPost, allPosts }: BlogSidebarProps) {
+  const postsSource = allPosts && allPosts.length > 0 ? allPosts : blogs;
+
   // Recent posts: latest 3 excluding current
-  const recentPosts = blogs
+  const recentPosts = postsSource
     .filter(p => p.slug !== currentPost.slug)
     .slice(0, 3);
 
   // Related posts: same category excluding current
-  const relatedPosts = blogs
+  const relatedPosts = postsSource
     .filter(p => p.category === currentPost.category && p.slug !== currentPost.slug)
     .slice(0, 3);
 

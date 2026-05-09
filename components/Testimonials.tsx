@@ -33,7 +33,7 @@ import { FadeIn, FadeInStagger } from "./Motion";
 
 export default function Testimonials() {
   return (
-    <section id="testimonials" className="py-24 sm:py-32 bg-stone-50">
+    <section id="testimonials" className="py-24 sm:py-32 bg-stone-200">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <FadeIn className="mb-16 flex flex-col md:flex-row items-start md:items-end justify-between gap-8">
           <div className="max-w-2xl">
@@ -47,7 +47,6 @@ export default function Testimonials() {
               src="/images/Google-Review-QR.jpeg"
               alt="Google review QR code"
               fill
-              unoptimized
               sizes="128px"
               className="object-cover grayscale hover:grayscale-0 transition-all duration-500"
             />
@@ -72,7 +71,7 @@ export default function Testimonials() {
                       </svg>
                     ))}
                   </div>
-                  <p className="text-lg sm:text-xl leading-relaxed text-stone-600 font-medium italic font-display">
+                  <p className="text-md sm:text-md leading-relaxed text-stone-600 font-normal">
                     “{item.quote}”
                   </p>
                 </div>
@@ -82,10 +81,10 @@ export default function Testimonials() {
                     {item.name[0]}
                   </div>
                   <div>
-                    <p className="text-base font-bold text-secondary">
+                    <p className="text-base font-semibold text-secondary">
                       {item.name}
                     </p>
-                    <p className="text-xs uppercase tracking-[0.2em] text-stone-400 font-bold">
+                    <p className="text-xs text-stone-500 font-medium">
                       {item.role}
                     </p>
                   </div>

@@ -169,15 +169,20 @@ export default function TipTapEditor({
     },
     editorProps: {
        attributes: {
-          class: "prose prose-stone max-w-none focus:outline-none min-h-[500px] p-6 lg:p-12 prose-headings:font-black prose-p:font-medium prose-a:text-primary",
+          class: "prose prose-stone max-w-none focus:outline-none p-6 lg:p-12 prose-headings:font-black prose-p:font-semibold prose-a:text-primary prose-p:my-2 prose-p:leading-relaxed",
        }
     }
   });
 
   return (
-    <div className="border border-stone-200 rounded-xl bg-white shadow-sm overflow-hidden min-h-[600px] transition-all hover:border-stone-300">
+    <div className="border border-stone-200 rounded-xl bg-white shadow-sm overflow-hidden flex flex-col h-[650px] transition-all hover:border-stone-300">
+      {/* Permanent Static Top Formatting Bar */}
       <MenuBar editor={editor} />
-      <EditorContent editor={editor} />
+      
+      {/* Scrollable typing area locked inside the editor box */}
+      <div className="flex-1 overflow-y-auto bg-white">
+        <EditorContent editor={editor} />
+      </div>
     </div>
   );
 }

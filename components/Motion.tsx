@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, HTMLMotionProps } from "framer-motion";
+import { motion, HTMLMotionProps, Variants } from "framer-motion";
 import { ReactNode } from "react";
 
 interface FadeInProps extends HTMLMotionProps<"div"> {
@@ -27,23 +27,29 @@ export function FadeIn({
     none: { x: 0, y: 0 },
   };
 
-  return (
-    <motion.div
-      initial={{
-        opacity: 0,
-        ...directions[direction],
-      }}
-      whileInView={{
-        opacity: 1,
-        x: 0,
-        y: 0,
-      }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{
+  const variants: Variants = {
+    initial: {
+      opacity: 0,
+      ...directions[direction],
+    },
+    animate: {
+      opacity: 1,
+      x: 0,
+      y: 0,
+      transition: {
         duration,
         delay,
-        ease: [0.21, 0.47, 0.32, 0.98],
-      }}
+        ease: [0.21, 0.47, 0.32, 0.98] as const,
+      },
+    },
+  };
+
+  return (
+    <motion.div
+      variants={variants}
+      initial="initial"
+      whileInView="animate"
+      viewport={{ once: true, margin: "-20px" }}
       {...props}
     >
       {children}
@@ -58,6 +64,7 @@ export function FadeInStagger({ children, ...props }: HTMLMotionProps<"div">) {
       whileInView="animate"
       viewport={{ once: true }}
       variants={{
+        initial: {},
         animate: {
           transition: {
             staggerChildren: 0.1,
@@ -70,4 +77,5 @@ export function FadeInStagger({ children, ...props }: HTMLMotionProps<"div">) {
     </motion.div>
   );
 }
+
 

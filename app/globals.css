@@ -28,7 +28,7 @@
   --color-accent: var(--accent);
   --color-ring: var(--ring);
   --font-sans: var(--font-outfit);
-  --font-display: var(--font-cormorant);
+  --font-display: var(--font-outfit);
 }
 
 * {

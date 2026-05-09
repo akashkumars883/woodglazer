@@ -1,10 +1,12 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { ArrowLeft, Save, Loader2, Image as ImageIcon, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import ImageUploader from "@/components/admin/ImageUploader";
+import AIAssistButton from "@/components/admin/AIAssistButton";
 import { updateService } from "../../../actions";
 import { supabase } from "@/lib/supabase";
 
@@ -27,9 +29,6 @@ export default function EditCategoryPage() {
 
   const [newKeyword, setNewKeyword] = useState("");
   const [newGalleryImage, setNewGalleryImage] = useState("");
-
-
-  // fetchCategory removed as it was unused.
 
   useEffect(() => {
     let isMounted = true;
@@ -57,7 +56,6 @@ export default function EditCategoryPage() {
     e.preventDefault();
     setSaving(true);
     
-    // We update using ID
     const result = await updateService(formData.id, 'category', {
       title: formData.title,
       slug: formData.slug,
@@ -69,7 +67,6 @@ export default function EditCategoryPage() {
       gallery: formData.gallery
     });
 
-    
     if (result.success) {
       router.push("/admin/services");
       router.refresh();
@@ -108,7 +105,7 @@ export default function EditCategoryPage() {
            </div>
            <div className="p-4 bg-white rounded-2xl border border-stone-100 shadow-sm overflow-hidden relative w-16 h-16">
               {formData.image ? (
-                <Image src={formData.image} alt={formData.title} fill className="object-cover" unoptimized />
+                <Image src={formData.image} alt={formData.title} fill className="object-cover" />
               ) : (
                 <ImageIcon className="w-8 h-8 text-primary" />
               )}
@@ -139,14 +136,11 @@ export default function EditCategoryPage() {
               />
             </div>
 
-            <div className="md:col-span-2 space-y-3">
-              <label className="text-xs font-black uppercase tracking-[0.2em] text-stone-400 ml-1">Image URL</label>
-              <input
-                required
-                type="text"
-                className="w-full bg-stone-50 border border-stone-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none font-medium"
+            <div className="md:col-span-2">
+              <ImageUploader 
                 value={formData.image}
-                onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+                onChange={(url) => setFormData({ ...formData, image: url })}
+                label="Category Image"
               />
             </div>
 
@@ -175,7 +169,6 @@ export default function EditCategoryPage() {
                         alt={`Gallery image ${idx + 1}`}
                         fill
                         className="object-cover transition-transform group-hover:scale-110"
-                        unoptimized
                       />
                      <button 
                        type="button"
@@ -186,25 +179,26 @@ export default function EditCategoryPage() {
                      </button>
                    </div>
                  ))}
-                 <div className="bg-stone-50 border-2 border-dashed border-stone-200 rounded-2xl p-6 flex flex-col items-center justify-center gap-4">
-                    <input 
-                      type="text" 
-                      placeholder="Paste Image URL..." 
-                      className="w-full bg-white border border-stone-200 rounded-xl px-4 py-2 text-sm outline-none"
+                 
+                 <div className="bg-stone-50 border border-stone-200 rounded-2xl p-6 space-y-4 md:col-span-1">
+                    <h4 className="text-xs font-black uppercase tracking-widest text-stone-400">Add to Gallery</h4>
+                    <ImageUploader 
                       value={newGalleryImage}
-                      onChange={(e) => setNewGalleryImage(e.target.value)}
+                      onChange={setNewGalleryImage}
+                      label="New Gallery Photo"
                     />
                     <button 
                       type="button"
+                      disabled={!newGalleryImage}
                       onClick={() => {
                         if (newGalleryImage) {
                           setFormData({ ...formData, gallery: [...(formData.gallery || []), newGalleryImage] });
                           setNewGalleryImage("");
                         }
                       }}
-                      className="text-xs font-bold text-primary flex items-center gap-2 hover:underline"
+                      className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-primary text-white rounded-xl font-bold text-xs hover:scale-105 transition-all shadow-md shadow-primary/10 disabled:opacity-50"
                     >
-                      Add to Gallery
+                      + Confirm Add
                     </button>
                  </div>
               </div>
@@ -212,10 +206,39 @@ export default function EditCategoryPage() {
 
             {/* SEO Section */}
             <div className="md:col-span-2 pt-8 border-t border-stone-100 space-y-8">
-              <h3 className="text-xl font-bold text-secondary flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-primary" />
-                Advanced SEO Settings
-              </h3>
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <h3 className="text-xl font-bold text-secondary flex items-center gap-2">
+                  <TrendingUp className="w-5 h-5 text-primary" />
+                  Advanced SEO Settings
+                </h3>
+                {formData.title && (
+                  <AIAssistButton 
+                     formatAsJson
+                     label="AI SEO Auto-Fill"
+                     loadingText="Optimizing SEO..."
+                     prompt={`Analyze the service category "${formData.title}" with description "${formData.description}". Write highly competitive SEO tags for a premium home interior carpentry and wood polishing business based in India.
+                     You must respond with a JSON object containing:
+                     {
+                       "seo_title": "Highly engaging page title under 60 chars",
+                       "seo_description": "Search engine meta description under 155 chars",
+                       "seo_keywords": ["keyword1", "keyword2", "keyword3", "keyword4", "keyword5"]
+                     }`}
+                     onSuccess={(jsonText) => {
+                        try {
+                           const parsed = JSON.parse(jsonText);
+                           setFormData({
+                              ...formData,
+                              seo_title: parsed.seo_title || "",
+                              seo_description: parsed.seo_description || "",
+                              seo_keywords: Array.isArray(parsed.seo_keywords) ? parsed.seo_keywords : []
+                           });
+                        } catch (err) {
+                           console.error("Could not parse AI response", jsonText, err);
+                        }
+                     }}
+                  />
+                )}
+              </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-3">

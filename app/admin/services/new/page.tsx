@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Save, Loader2, Image as ImageIcon } from "lucide-react";
 import Link from "next/link";
+import ImageUploader from "@/components/admin/ImageUploader";
 import { saveService } from "../../actions";
 
 export default function NewCategoryPage() {
@@ -94,17 +95,12 @@ export default function NewCategoryPage() {
               />
             </div>
 
-            <div className="md:col-span-2 space-y-3">
-              <label className="text-xs font-black uppercase tracking-[0.2em] text-stone-400 ml-1">Image URL</label>
-              <input
-                required
-                type="text"
-                placeholder="https://images.unsplash.com/..."
-                className="w-full bg-stone-50 border border-stone-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none font-medium"
+            <div className="md:col-span-2">
+              <ImageUploader 
                 value={formData.image}
-                onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+                onChange={(url) => setFormData({ ...formData, image: url })}
+                label="Category Image"
               />
-              <p className="text-[10px] text-stone-400 font-bold uppercase tracking-widest ml-1">Tip: Use a high-quality 16:9 ratio image.</p>
             </div>
 
             <div className="md:col-span-2 space-y-3">

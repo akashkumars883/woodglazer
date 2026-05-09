@@ -50,7 +50,6 @@ export default async function LatestBlog() {
                   alt={blog.title}
                   src={blog.image}
                   fill
-                  unoptimized
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
                 <div className="absolute top-4 left-4">
@@ -60,7 +59,7 @@ export default async function LatestBlog() {
                 </div>
               </div>
               <div className="p-6 flex flex-col flex-1">
-                <span className="text-xs text-muted mb-2 font-medium uppercase tracking-wider">
+                <span className="text-xs text-muted mb-2 font-medium uppercase tracking-wider" suppressHydrationWarning>
                   {new Date(blog.created_at).toLocaleDateString()} • {blog.read_time}
                 </span>
 

@@ -11,6 +11,27 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
+import QuickActionsClient from "@/components/admin/QuickActionsClient";
+
+export const dynamic = "force-dynamic";
+
+function formatRelativeTime(dateString?: string) {
+  if (!dateString) return "Recently";
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffMins = Math.floor(diffMs / (1000 * 60));
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  if (diffMins < 60) {
+    return diffMins <= 1 ? "Just now" : `${diffMins} mins ago`;
+  } else if (diffHours < 24) {
+    return diffHours === 1 ? "1 hr ago" : `${diffHours} hrs ago`;
+  } else {
+    return diffDays === 1 ? "Yesterday" : `${diffDays} days ago`;
+  }
+}
 
 export default async function AdminDashboard() {
   // Fetch real counts from Supabase
@@ -27,12 +48,55 @@ export default async function AdminDashboard() {
     .select("*", { count: 'exact' })
     .order("created_at", { ascending: false });
 
+  // Fetch real recent sub-service updates
+  const { data: recentSubServices } = await supabase
+    .from("sub_services")
+    .select(`
+      title,
+      created_at,
+      service_categories (
+        title
+      )
+    `)
+    .order("created_at", { ascending: false })
+    .limit(5);
+
+  const realUpdates = (recentSubServices || []).map((sub: any) => ({
+    title: sub.title,
+    category: sub.service_categories?.title || "Specialty Woodwork",
+    status: "Published",
+    date: formatRelativeTime(sub.created_at)
+  }));
+
+  const displayUpdates = realUpdates.length > 0 ? realUpdates : [
+    { title: "Melamine Polish", category: "Wood Polishing", status: "Published", date: "2 hours ago" },
+    { title: "Residential Carpentry", category: "Carpentry", status: "Published", date: "5 hours ago" },
+    { title: "Office Fit-Out", category: "Commercial", status: "Draft", date: "1 day ago" }
+  ];
+
   const unreadLeadsCount = (inquiries || []).filter(i => !i.viewed).length;
   const leadsCount = inquiries?.length || 0;
 
+  // Fetch real total_visits from site_settings table
+  const { data: visitsData } = await supabase
+    .from("site_settings")
+    .select("value")
+    .eq("key", "total_visits")
+    .single();
+
+  let realVisits = 0; // Fallback to 0 if not initialized
+  if (visitsData && visitsData.value) {
+    const val = visitsData.value as { count?: number } | number;
+    if (typeof val === "number") {
+      realVisits = val;
+    } else if (val && typeof (val as any).count === "number") {
+      realVisits = (val as any).count;
+    }
+  }
+
   const stats = [
-    { name: "Total Visits", value: "1,248", icon: Eye, color: "text-blue-600", bg: "bg-blue-50" },
-    { name: "Total Requests", value: leadsCount.toString(), icon: Users, color: "text-red-600", bg: "bg-red-50" },
+    { name: "Total Visits", value: realVisits.toLocaleString(), icon: Eye, color: "text-blue-600", bg: "bg-blue-50" },
+    { name: "Total Leads", value: leadsCount.toString(), icon: Users, color: "text-red-600", bg: "bg-red-50" },
     { name: "Total Categories", value: servicesCount?.toString() || "0", icon: Package, color: "text-orange-600", bg: "bg-orange-50" },
     { name: "Blog Posts", value: blogCount?.toString() || "0", icon: FileText, color: "text-green-600", bg: "bg-green-50" }
   ];
@@ -41,12 +105,12 @@ export default async function AdminDashboard() {
     <div className="space-y-10">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-           <h1 className="text-3xl font-bold text-secondary">Dashboard Overview</h1>
-           <p className="text-stone-500 font-medium">Welcome back, Admin. Here&apos;s what&apos;s happening today.</p>
+           <h1 className="text-3xl font-semibold text-secondary">Dashboard Overview</h1>
+           <p className="text-stone-500 font-medium">Welcome back, Wood Glazer Team. Here&apos;s what&apos;s happening today.</p>
         </div>
         <Link 
           href="/admin/blog/new"
-          className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-xl font-bold shadow-lg shadow-primary/20 hover:scale-105 transition-transform"
+          className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-xl font-semibold shadow-lg shadow-primary/20 hover:scale-105 transition-transform"
         >
            <FileEdit className="w-5 h-5" />
            New Blog Post
@@ -68,7 +132,7 @@ export default async function AdminDashboard() {
              </div>
              <div>
                 <p className="text-stone-500 font-medium text-sm">{stat.name}</p>
-                <h3 className="text-2xl font-black text-secondary mt-1">{stat.value}</h3>
+                <h3 className="text-3xl font-semibold text-secondary mt-1">{stat.value}</h3>
              </div>
           </div>
         ))}
@@ -77,17 +141,14 @@ export default async function AdminDashboard() {
       {/* Recent Activity & Quick Actions */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
          <div className="lg:col-span-8 space-y-6">
+            {/* Recent Service Updates Card */}
             <div className="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
                <div className="p-6 border-b border-stone-100 flex items-center justify-between">
                   <h3 className="font-bold text-secondary text-lg">Recent Service Updates</h3>
-                  <button className="text-sm font-bold text-primary hover:underline italic">View All</button>
+                  <Link href="/admin/services" className="text-sm font-bold text-primary hover:underline italic">View All</Link>
                </div>
                <div className="p-0">
-                  {[
-                    { title: "Melamine Polish", category: "Wood Polishing", status: "Published", date: "2 hours ago" },
-                    { title: "Residential Carpentry", category: "Carpentry", status: "Published", date: "5 hours ago" },
-                    { title: "Office Fit-Out", category: "Commercial", status: "Draft", date: "1 day ago" }
-                  ].map((item, idx) => (
+                  {displayUpdates.map((item, idx) => (
                     <div key={idx} className="flex items-center justify-between p-6 hover:bg-stone-50 transition-colors border-b border-stone-50 last:border-0">
                        <div className="flex items-center gap-4">
                           <div className="w-10 h-10 rounded-lg bg-stone-100 flex items-center justify-center">
@@ -107,6 +168,40 @@ export default async function AdminDashboard() {
                        </div>
                     </div>
                   ))}
+               </div>
+            </div>
+
+            {/* Recent Customer Inquiries Card */}
+            <div className="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
+               <div className="p-6 border-b border-stone-100 flex items-center justify-between">
+                  <h3 className="font-bold text-secondary text-lg">Recent Customer Inquiries</h3>
+                  <Link href="/admin/leads" className="text-sm font-bold text-primary hover:underline italic">View All</Link>
+               </div>
+               <div className="p-0 divide-y divide-stone-50">
+                  {(inquiries || []).slice(0, 3).map((lead) => (
+                    <div key={lead.id} className="p-6 flex items-center justify-between hover:bg-stone-50 transition-colors">
+                       <div className="flex items-center gap-4">
+                          <div className="w-10 h-10 rounded-lg bg-stone-100 flex items-center justify-center font-bold text-secondary text-sm">
+                             {lead.name[0]?.toUpperCase() || "C"}
+                          </div>
+                          <div>
+                             <p className="font-bold text-secondary text-sm">{lead.name}</p>
+                             <p className="text-xs text-stone-500 line-clamp-1">{lead.service || "General Inquiry"}</p>
+                          </div>
+                       </div>
+                       <div className="flex items-center gap-4 shrink-0">
+                          <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${!lead.viewed ? "bg-red-50 text-red-600 border border-red-100 animate-pulse" : "bg-stone-50 text-stone-400"}`}>
+                             {!lead.viewed ? "NEW" : "Viewed"}
+                          </span>
+                          <span className="text-xs text-stone-400 font-medium">{formatRelativeTime(lead.created_at)}</span>
+                       </div>
+                    </div>
+                  ))}
+                  {(inquiries || []).length === 0 && (
+                    <div className="p-8 text-center text-stone-400 text-sm">
+                       No customer inquiries received yet.
+                    </div>
+                  )}
                </div>
             </div>
          </div>
@@ -155,21 +250,12 @@ export default async function AdminDashboard() {
                   <ArrowUpRight className="w-4 h-4 text-stone-300 group-hover:text-primary transition-colors" />
                 </Link>
                 
-                <div className="space-y-2 pt-2">
-                  {[
-                    { name: "Review Reports", icon: TrendingUp },
-                    { name: "Site Backups", icon: CheckCircle2 },
-                    { name: "Schedule Updates", icon: Clock }
-                  ].map((link) => (
-                    <button key={link.name} className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-stone-50 transition-colors group">
-                       <div className="flex items-center gap-3">
-                          <link.icon className="w-4 h-4 text-stone-400 group-hover:text-primary transition-colors" />
-                          <span className="text-sm font-medium text-stone-600 group-hover:text-secondary">{link.name}</span>
-                       </div>
-                       <ArrowUpRight className="w-4 h-4 text-stone-200 group-hover:text-primary transition-colors" />
-                    </button>
-                  ))}
-                </div>
+                <QuickActionsClient 
+                  realVisits={realVisits}
+                  leadsCount={leadsCount}
+                  servicesCount={servicesCount || 0}
+                  blogCount={blogCount || 0}
+                />
               </div>
             </div>
          </div>

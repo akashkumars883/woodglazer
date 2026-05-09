@@ -105,7 +105,6 @@ export default async function ServicesParent({
                 alt={service.title}
                 fill
                 className="object-cover opacity-20 blur-xl scale-110"
-                unoptimized
               />
             </div>
           ) : (
@@ -115,7 +114,6 @@ export default async function ServicesParent({
                 alt={service.title}
                 fill
                 className="object-cover opacity-50 scale-105"
-                unoptimized
               />
               <div className="absolute inset-0 bg-gradient-to-t from-stone-900 via-stone-900/40 to-transparent" />
             </>
@@ -142,10 +140,10 @@ export default async function ServicesParent({
 
       {/* Sub-Services Listing */}
       <section className="py-6 sm:py-6">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-10">
           <div className="mb-12">
             <h2 className="text-3xl font-bold text-secondary flex items-center gap-4">
-              Our <span className="text-primary italic font-serif">Specialties</span>
+              Our <span>Specialties</span>
               <span className="h-px flex-1 bg-stone-200 hidden sm:block" />
             </h2>
           </div>
@@ -162,7 +160,6 @@ export default async function ServicesParent({
                     alt={subService.title}
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    unoptimized
                   />
                 </div>
                 <div className="space-y-4">

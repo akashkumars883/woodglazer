@@ -50,21 +50,50 @@ export default async function BlogDetails({ params }: { params: Promise<{ slug: 
 
   if (!blog) notFound();
 
+  // Map to BlogPost interface to maintain full type-safety
+  const formattedBlog = {
+    title: blog.title || "",
+    slug: blog.slug || "",
+    description: blog.description || "",
+    image: blog.image || "",
+    date: blog.created_at || "",
+    author: blog.author || "Wood Glazer Team",
+    category: blog.category || "General",
+    readTime: blog.read_time || "",
+    content: blog.content || "",
+    featured: blog.featured,
+  };
+
+  // Fetch all posts to allow dynamic, database-backed interlinking in sidebar
+  const { data: blogList } = await supabase
+    .from("blog_posts")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  const formattedAllBlogs = (blogList || []).map((b) => ({
+    title: b.title || "",
+    slug: b.slug || "",
+    description: b.description || "",
+    image: b.image || "",
+    date: b.created_at || "",
+    author: b.author || "Wood Glazer Team",
+    category: b.category || "General",
+    readTime: b.read_time || "",
+    content: b.content || "",
+    featured: b.featured,
+  }));
+
   return (
     <>
       <article className="min-h-screen pt-12 pb-16">
         <StructuredData
           id="blog-post-data"
           data={[
-            createBlogNode({
-              ...blog,
-              date: blog.created_at,
-              readTime: blog.read_time
-            }),
+            createBlogNode(formattedBlog),
             createBreadcrumbNode([
               { name: "Home", path: "/" },
               { name: "Blog", path: "/blog" },
-              { name: blog.title, path: `/blog/${blog.slug}` },
+              { name: formattedBlog.title, path: `/blog/${formattedBlog.slug}` },
             ]),
           ]}
         />
@@ -77,13 +106,13 @@ export default async function BlogDetails({ params }: { params: Promise<{ slug: 
               {/* Post Header */}
               <header className="mb-12">
                 <div className="flex items-center gap-3 text-xs text-primary mb-6 font-bold uppercase tracking-[0.2em]">
-                  <span>{blog.category}</span>
+                  <span>{formattedBlog.category}</span>
                   <span className="text-stone-300">•</span>
-                  <span className="text-stone-500">{blog.read_time}</span>
+                  <span className="text-stone-500">{formattedBlog.readTime}</span>
                 </div>
                 
                 <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-stone-900 mb-8 leading-[1.1] tracking-tight">
-                  {blog.title}
+                  {formattedBlog.title}
                 </h1>
                 
                 <div className="flex items-center gap-4 border-y border-stone-100 py-6">
@@ -93,8 +122,8 @@ export default async function BlogDetails({ params }: { params: Promise<{ slug: 
                     </svg>
                   </div>
                   <div>
-                    <p className="text-stone-900 font-bold">{blog.author}</p>
-                    <p className="text-stone-500 text-sm">Published on {new Date(blog.created_at).toLocaleDateString()}</p>
+                    <p className="text-stone-900 font-bold">{formattedBlog.author}</p>
+                    <p className="text-stone-500 text-sm" suppressHydrationWarning>Published on {new Date(formattedBlog.date).toLocaleDateString()}</p>
                   </div>
                 </div>
               </header>
@@ -102,19 +131,18 @@ export default async function BlogDetails({ params }: { params: Promise<{ slug: 
               {/* Featured Image */}
               <div className="relative aspect-[21/9] rounded-2xl overflow-hidden shadow-2xl mb-12">
                 <Image
-                  alt={blog.title}
-                  src={blog.image}
+                  alt={formattedBlog.title}
+                  src={formattedBlog.image}
                   fill
                   className="object-cover"
                   priority
-                  unoptimized
                 />
               </div>
 
               {/* Blog Content */}
               <div 
                 className="prose prose-stone prose-lg max-w-none prose-headings:text-secondary prose-headings:font-black prose-p:text-stone-600 prose-p:leading-relaxed prose-li:text-stone-600 prose-strong:text-secondary prose-img:rounded-3xl"
-                dangerouslySetInnerHTML={{ __html: blog.content }} 
+                dangerouslySetInnerHTML={{ __html: formattedBlog.content }} 
               />
               
               {/* Share section */}
@@ -135,7 +163,7 @@ export default async function BlogDetails({ params }: { params: Promise<{ slug: 
 
             {/* Sidebar Column */}
             <div className="lg:col-span-4">
-              <BlogSidebar currentPost={blog} />
+              <BlogSidebar currentPost={formattedBlog} allPosts={formattedAllBlogs} />
             </div>
           </div>
         </div>

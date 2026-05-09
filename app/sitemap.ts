@@ -18,15 +18,45 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       images: [absoluteUrl("/brand/opengraph-image.jpg")],
     },
     {
+      url: absoluteUrl("/about"),
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
       url: absoluteUrl("/services"),
       lastModified,
       changeFrequency: "weekly",
       priority: 0.9,
       images: [absoluteUrl("/images/hero-image3.jpg")],
     },
+    {
+      url: absoluteUrl("/blog"),
+      lastModified,
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    {
+      url: absoluteUrl("/contact"),
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
+      url: absoluteUrl("/privacy-policy"),
+      lastModified,
+      changeFrequency: "yearly",
+      priority: 0.3,
+    },
+    {
+      url: absoluteUrl("/terms-of-service"),
+      lastModified,
+      changeFrequency: "yearly",
+      priority: 0.3,
+    },
   ];
 
-  // Fetch real data from Supabase for sitemap
+  // Fetch real service data from Supabase for sitemap
   const { data: services } = await supabase
     .from("service_categories")
     .select("slug, sub_services(slug)")
@@ -52,5 +82,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     return [parentRoute, ...subServiceRoutes];
   });
 
-  return [...staticRoutes, ...serviceRoutes];
+  // Fetch real blog data from Supabase for sitemap
+  const { data: blogs } = await supabase
+    .from("blog_posts")
+    .select("slug, created_at")
+    .order("created_at", { ascending: false });
+
+  const blogRoutes: MetadataRoute.Sitemap = (blogs || []).map((blog) => ({
+    url: absoluteUrl(`/blog/${blog.slug}`),
+    lastModified: blog.created_at ? new Date(blog.created_at) : lastModified,
+    changeFrequency: "weekly" as const,
+    priority: 0.6,
+  }));
+
+  return [...staticRoutes, ...serviceRoutes, ...blogRoutes];
 }

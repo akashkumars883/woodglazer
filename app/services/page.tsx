@@ -10,7 +10,7 @@ import {
 } from "@/lib/seo";
 import { supabase } from "@/lib/supabase";
 import { getDynamicSiteConfig } from "@/lib/site";
-import { FadeIn, FadeInStagger } from "@/components/Motion";
+import { FadeIn } from "@/components/Motion";
 import PageHero from "@/components/PageHero";
 
 export async function generateMetadata() {
@@ -55,7 +55,7 @@ export default async function Services() {
       <section className="py-24 sm:py-40">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-24 lg:gap-32">
-            {services.map((service: any, index: number) => (
+            {services.map((service: { slug: string; image: string; title: string; description: string; sub_services: { count: number }[] }, index: number) => (
               <FadeIn key={service.slug} direction={index % 2 === 0 ? "left" : "right"}>
                 <article className="group relative">
                   <div className="flex flex-col space-y-10">
@@ -65,7 +65,6 @@ export default async function Services() {
                         alt={service.title}
                         fill
                         className="object-cover transition-transform duration-1000 group-hover:scale-110"
-                        unoptimized
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-stone-900/90 via-stone-900/10 to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
                       <div className="absolute bottom-10 left-10">

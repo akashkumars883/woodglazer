@@ -368,3 +368,177 @@ export async function markInquiryAsViewed(id: string) {
   revalidatePath("/admin");
   return { success: true };
 }
+
+export async function incrementVisitorCount() {
+  try {
+    const { data: existing } = await supabase
+      .from("site_settings")
+      .select("value")
+      .eq("key", "total_visits")
+      .single();
+
+    let currentCount = 0; // Starting base from 0
+    if (existing && existing.value) {
+      const val = existing.value as { count?: number } | number;
+      if (typeof val === "number") {
+        currentCount = val;
+      } else if (val && typeof (val as any).count === "number") {
+        currentCount = (val as any).count;
+      }
+    }
+
+    const nextCount = currentCount + 1;
+
+    await supabase
+      .from("site_settings")
+      .upsert({ key: "total_visits", value: { count: nextCount } }, { onConflict: "key" });
+
+    return { success: true, count: nextCount };
+  } catch (err: unknown) {
+    console.error("Error incrementing visitor count:", err);
+    return { success: false };
+  }
+}
+
+// --- Universal AI Actions (Groq, OpenAI, DeepSeek, etc.) ---
+
+export async function getAIConfig() {
+  const envKey = process.env.UNIVERSAL_AI_KEY || process.env.GEMINI_API_KEY;
+  const envEndpoint = process.env.UNIVERSAL_AI_ENDPOINT || "https://api.groq.com/openai/v1";
+  const envModel = process.env.UNIVERSAL_AI_MODEL || "llama-3.3-70b-versatile";
+
+  if (envKey) {
+    return { 
+      success: true, 
+      key: envKey, 
+      endpoint: envEndpoint, 
+      model: envModel, 
+      source: "env" 
+    };
+  }
+
+  const { data, error } = await supabase
+    .from("site_settings")
+    .select("value")
+    .eq("key", "universal_ai_config")
+    .single();
+
+  if (error || !data) {
+    return { 
+      success: false, 
+      key: "", 
+      endpoint: "https://api.groq.com/openai/v1", 
+      model: "llama-3.3-70b-versatile" 
+    };
+  }
+  
+  const val = data.value as { key?: string; endpoint?: string; model?: string } | null;
+  return { 
+    success: true, 
+    key: val?.key || "", 
+    endpoint: val?.endpoint || "https://api.groq.com/openai/v1", 
+    model: val?.model || "llama-3.3-70b-versatile",
+    source: "db" 
+  };
+}
+
+// Backwards compatibility aliases for existing imports
+export async function getGeminiApiKey() {
+  const config = await getAIConfig();
+  return { success: config.success, key: config.key, source: config.source };
+}
+
+export async function saveAIConfig(key: string, endpoint: string, model: string) {
+  const { data: existing } = await supabase
+    .from("site_settings")
+    .select("id")
+    .eq("key", "universal_ai_config")
+    .single();
+
+  const payload = { key, endpoint: endpoint || "https://api.groq.com/openai/v1", model: model || "llama-3.3-70b-versatile" };
+  let error;
+  
+  if (existing) {
+    const res = await supabase
+      .from("site_settings")
+      .update({ value: payload })
+      .eq("key", "universal_ai_config");
+    error = res.error;
+  } else {
+    const res = await supabase
+      .from("site_settings")
+      .insert([{ key: "universal_ai_config", value: payload }]);
+    error = res.error;
+  }
+
+  if (error) {
+    return { success: false, error: error.message };
+  }
+  return { success: true };
+}
+
+export async function saveGeminiApiKey(key: string) {
+  const current = await getAIConfig();
+  return saveAIConfig(key, current.endpoint, current.model);
+}
+
+export async function generateAIContent(prompt: string, formatAsJson: boolean = false) {
+  try {
+    const config = await getAIConfig();
+    const apiKey = config.key;
+
+    if (!apiKey) {
+      return { success: false, error: "API_KEY_MISSING" };
+    }
+
+    // Clean up endpoint trailing slash
+    let endpoint = config.endpoint.trim();
+    if (endpoint.endsWith("/")) {
+      endpoint = endpoint.slice(0, -1);
+    }
+
+    // Standard OpenAI compatible Chat completions URL
+    const url = `${endpoint}/chat/completions`;
+
+    const systemInstruction = formatAsJson 
+      ? "You are a professional SEO expert and web developer. Return ONLY a valid, single JSON object. Do NOT wrap the JSON inside markdown code blocks like ```json ... ```. Your output must start with { and end with } so it is directly parseable."
+      : "You are a world-class article writer and luxury home polishing/painting designer. Write high-converting, deeply detailed, and creative content.";
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        model: config.model,
+        messages: [
+          { role: "system", content: systemInstruction },
+          { role: "user", content: prompt }
+        ],
+        temperature: 0.3,
+        max_tokens: formatAsJson ? 1000 : 2500
+      })
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("AI API Error details:", errorText);
+      return { success: false, error: `API returned status ${response.status}: ${errorText.substring(0, 100)}` };
+    }
+
+    const resData = await response.json();
+    const generatedText = resData.choices?.[0]?.message?.content || "";
+
+    if (!generatedText) {
+      return { success: false, error: "Empty response from AI API" };
+    }
+
+    return { success: true, text: generatedText.trim() };
+  } catch (err: unknown) {
+    console.error("generateAIContent error:", err);
+    return { success: false, error: err instanceof Error ? err.message : String(err) };
+  }
+}
+
+

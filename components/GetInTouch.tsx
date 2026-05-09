@@ -137,7 +137,7 @@ export default function GetInTouch({
                 <button
                   type="submit"
                   disabled={loading}
-                  className="inline-flex w-full items-center justify-center rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-all duration-200 hover:bg-secondary disabled:opacity-50"
+                  className="inline-flex w-full items-center justify-center rounded-full bg-primary px-5 py-4 text-sm font-semibold text-primary-foreground transition-all duration-200 hover:bg-secondary disabled:opacity-50"
                 >
                   {loading ? (
                     <>
