@@ -30,10 +30,10 @@ export default function FAQ() {
     <section id="faq" className="py-24 sm:py-32 bg-white">
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         <FadeIn className="mb-16 text-center">
-          <p className="text-sm font-black uppercase tracking-[0.3em] text-primary mb-3">
+          <p className="text-sm font-semibold uppercase tracking-[0.3em] text-primary mb-3">
             Common Inquiries
           </p>
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-secondary">
+          <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-secondary">
             Questions & Answers
           </h2>
         </FadeIn>
@@ -44,7 +44,7 @@ export default function FAQ() {
               <details
                 className="group rounded-2xl border border-stone-200 bg-stone-50/50 p-6 transition-all duration-300 open:bg-white open:shadow-xl open:border-primary/20"
               >
-                <summary className="flex cursor-pointer list-none items-center justify-between text-lg font-bold text-secondary">
+                <summary className="flex cursor-pointer list-none items-center justify-between text-lg font-semibold text-secondary">
                   <span className="pr-6">{faq.question}</span>
                   <span className="shrink-0 transition-transform duration-300 group-open:rotate-180">
                     <svg className="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">

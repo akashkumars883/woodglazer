@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Sparkles, Loader2, Key, HelpCircle, X, Check, AlertCircle, Cpu, Globe } from "lucide-react";
 import { generateAIContent, saveAIConfig, getAIConfig } from "@/app/admin/actions";
 
@@ -32,15 +32,49 @@ export default function AIAssistButton({
   const [keyError, setKeyError] = useState<string | null>(null);
   const [keySuccess, setKeySuccess] = useState(false);
 
+  // Load config on mount from localStorage
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("universal_ai_config");
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (parsed.key) {
+            setApiKeyInput(parsed.key);
+            setApiEndpointInput(parsed.endpoint || "https://api.groq.com/openai/v1");
+            setApiModelInput(parsed.model || "llama-3.3-70b-versatile");
+          }
+        } catch (e) {
+          console.error("Error parsing local AI config:", e);
+        }
+      }
+    }
+  }, []);
+
   const handleAction = async () => {
     setLoading(true);
     try {
-      // 1. Try generating content
-      const result = await generateAIContent(prompt, formatAsJson);
+      // 1. Try reading from localStorage first
+      let localConfig = null;
+      if (typeof window !== "undefined") {
+        const saved = localStorage.getItem("universal_ai_config");
+        if (saved) {
+          try {
+            localConfig = JSON.parse(saved);
+          } catch (e) {}
+        }
+      }
+
+      // 2. Generate content passing localConfig to bypass cached keys if valid
+      const result = await generateAIContent(
+        prompt, 
+        formatAsJson, 
+        (localConfig && localConfig.key?.trim()) ? localConfig : undefined
+      );
 
       if (!result.success) {
         if (result.error === "API_KEY_MISSING") {
-          // Fetch current config to populate modal
+          // Fetch current DB config to populate modal as fallback
           const config = await getAIConfig();
           setApiKeyInput(config.key || "");
           setApiEndpointInput(config.endpoint || "https://api.groq.com/openai/v1");
@@ -53,7 +87,26 @@ export default function AIAssistButton({
       }
 
       if (result.text) {
-        onSuccess(result.text);
+        if (formatAsJson) {
+          onSuccess(result.text);
+        } else {
+          // Simulate ChatGPT-style live streaming typing effect
+          const regex = /(<[^>]+>|[^<\s]+|\s+)/g;
+          const tokens = result.text.match(regex) || [];
+          
+          let current = "";
+          let index = 0;
+          
+          const interval = setInterval(() => {
+            if (index >= tokens.length) {
+              clearInterval(interval);
+              return;
+            }
+            current += tokens[index];
+            onSuccess(current);
+            index++;
+          }, 15);
+        }
       }
     } catch (err: unknown) {
       console.error(err);
@@ -66,10 +119,29 @@ export default function AIAssistButton({
   const handleOpenConfig = async () => {
     setLoading(true);
     try {
-      const config = await getAIConfig();
-      setApiKeyInput(config.key || "");
-      setApiEndpointInput(config.endpoint || "https://api.groq.com/openai/v1");
-      setApiModelInput(config.model || "llama-3.3-70b-versatile");
+      // Check localStorage first
+      let hasLocal = false;
+      if (typeof window !== "undefined") {
+        const saved = localStorage.getItem("universal_ai_config");
+        if (saved) {
+          try {
+            const parsed = JSON.parse(saved);
+            if (parsed.key) {
+              setApiKeyInput(parsed.key);
+              setApiEndpointInput(parsed.endpoint || "https://api.groq.com/openai/v1");
+              setApiModelInput(parsed.model || "llama-3.3-70b-versatile");
+              hasLocal = true;
+            }
+          } catch (e) {}
+        }
+      }
+
+      if (!hasLocal) {
+        const config = await getAIConfig();
+        setApiKeyInput(config.key || "");
+        setApiEndpointInput(config.endpoint || "https://api.groq.com/openai/v1");
+        setApiModelInput(config.model || "llama-3.3-70b-versatile");
+      }
       setShowKeyModal(true);
     } catch (err) {
       console.error("Could not fetch AI config:", err);
@@ -90,22 +162,31 @@ export default function AIAssistButton({
     setKeySuccess(false);
 
     try {
-      const result = await saveAIConfig(
-        apiKeyInput.trim(),
-        apiEndpointInput.trim(),
-        apiModelInput.trim()
-      );
-      if (result.success) {
-        setKeySuccess(true);
-        setTimeout(() => {
-          setShowKeyModal(false);
-          setKeySuccess(false);
-          // Auto-trigger the AI content action again!
-          handleAction();
-        }, 1500);
-      } else {
-        setKeyError(result.error || "Failed to save configuration");
+      const payload = {
+        key: apiKeyInput.trim(),
+        endpoint: apiEndpointInput.trim(),
+        model: apiModelInput.trim()
+      };
+
+      // 1. Save locally for instant reactivity
+      if (typeof window !== "undefined") {
+        localStorage.setItem("universal_ai_config", JSON.stringify(payload));
       }
+
+      // 2. Also write to DB for fallback
+      await saveAIConfig(
+        payload.key,
+        payload.endpoint,
+        payload.model
+      );
+
+      setKeySuccess(true);
+      setTimeout(() => {
+        setShowKeyModal(false);
+        setKeySuccess(false);
+        // Auto-trigger the AI content action again!
+        handleAction();
+      }, 1500);
     } catch (err: unknown) {
       setKeyError("An error occurred while saving the configuration");
     } finally {

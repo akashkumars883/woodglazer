@@ -69,12 +69,13 @@ export async function seedDatabase() {
             title: sub.title,
             description: sub.description,
             image: sub.image,
-            features: [
+            features: sub.features || [
               "Expert Application",
               "Durable Protection",
               "Refined Aesthetic",
               "Long-Lasting Shine"
-            ]
+            ],
+            details: sub.details || null
           }, { onConflict: 'slug' });
 
         if (subError) throw new Error(`Sub-service error: ${subError.message}`);
@@ -403,7 +404,8 @@ export async function incrementVisitorCount() {
 // --- Universal AI Actions (Groq, OpenAI, DeepSeek, etc.) ---
 
 export async function getAIConfig() {
-  const envKey = process.env.UNIVERSAL_AI_KEY || process.env.GEMINI_API_KEY;
+  const defaultKey = process.env.GROQ_API_KEY || "";
+  const envKey = process.env.UNIVERSAL_AI_KEY || process.env.GEMINI_API_KEY || process.env.GROQ_API_KEY;
   const envEndpoint = process.env.UNIVERSAL_AI_ENDPOINT || "https://api.groq.com/openai/v1";
   const envModel = process.env.UNIVERSAL_AI_MODEL || "llama-3.3-70b-versatile";
 
@@ -425,20 +427,21 @@ export async function getAIConfig() {
 
   if (error || !data) {
     return { 
-      success: false, 
-      key: "", 
+      success: true, 
+      key: defaultKey, 
       endpoint: "https://api.groq.com/openai/v1", 
-      model: "llama-3.3-70b-versatile" 
+      model: "llama-3.3-70b-versatile",
+      source: "hardcoded"
     };
   }
   
   const val = data.value as { key?: string; endpoint?: string; model?: string } | null;
   return { 
     success: true, 
-    key: val?.key || "", 
+    key: val?.key || defaultKey, 
     endpoint: val?.endpoint || "https://api.groq.com/openai/v1", 
     model: val?.model || "llama-3.3-70b-versatile",
-    source: "db" 
+    source: val?.key ? "db" : "hardcoded" 
   };
 }
 
@@ -482,10 +485,14 @@ export async function saveGeminiApiKey(key: string) {
   return saveAIConfig(key, current.endpoint, current.model);
 }
 
-export async function generateAIContent(prompt: string, formatAsJson: boolean = false) {
+export async function generateAIContent(
+  prompt: string, 
+  formatAsJson: boolean = false,
+  customConfig?: { key: string; endpoint: string; model: string }
+) {
   try {
-    const config = await getAIConfig();
-    const apiKey = config.key;
+    const config = customConfig || await getAIConfig();
+    const apiKey = config.key?.trim();
 
     if (!apiKey) {
       return { success: false, error: "API_KEY_MISSING" };
@@ -502,7 +509,16 @@ export async function generateAIContent(prompt: string, formatAsJson: boolean = 
 
     const systemInstruction = formatAsJson 
       ? "You are a professional SEO expert and web developer. Return ONLY a valid, single JSON object. Do NOT wrap the JSON inside markdown code blocks like ```json ... ```. Your output must start with { and end with } so it is directly parseable."
-      : "You are a world-class article writer and luxury home polishing/painting designer. Write high-converting, deeply detailed, and creative content.";
+      : `You are an elite, professional SEO content writer and premium wood polishing & carpentry expert. 
+Your goal is to write a deeply comprehensive, high-value, and search-optimized article that ranks #1 on Google.
+
+CRITICAL SEO & GOOGLE HELPFUL CONTENT GUIDELINES:
+1. Google E-E-A-T: Show rich, real-world industry expertise in luxury wood polishing (PU polish, Melamine, Deco paint, Lamination) and carpentry. Speak with the authority of a 15+ years experienced artisan.
+2. Word Count: Write a long-form article of exactly 1000 to 1200 words. Make it detailed, fully explaining each sub-topic with actionable advice.
+3. Formatting: Write in raw HTML format using clean tags (<h2>, <h3>, <p>, <ul>, <li>, <strong>). Do NOT wrap your output in markdown code blocks (such as \`\`\`html or \`\`\`). Return ONLY the pure, directly renderable HTML starting with your first heading.
+4. Human Tone: Use a natural, conversational, yet authoritative human voice. Avoid robotic/AI filler phrases, buzzwords, and repetitive transitions (e.g., avoid "delve", "testament", "nestled", "in today's digital age", "moreover", "furthermore", "ultimately", "in conclusion").
+5. Keyword Optimization: Naturally integrate the main keywords from the prompt in headings and first/last paragraphs. Do not keyword stuff; maintain high readability.
+6. Value & Engagement: Include step-by-step guides, maintenance tips, wood types comparison, or expert secrets that provide genuine, unique value to homeowners.`;
 
     const response = await fetch(url, {
       method: "POST",
@@ -538,6 +554,55 @@ export async function generateAIContent(prompt: string, formatAsJson: boolean = 
   } catch (err: unknown) {
     console.error("generateAIContent error:", err);
     return { success: false, error: err instanceof Error ? err.message : String(err) };
+  }
+}
+
+export async function suggestNewBlogTopics(existingTitles: string[]) {
+  const titlesList = existingTitles.length > 0 
+    ? existingTitles.map(t => `- "${t}"`).join("\n")
+    : "(No existing blogs yet)";
+
+  const prompt = `You are a premium SEO marketer for Wood Glazer (woodglazer.com), the leading brand in luxury wood polishing (PU polish, Melamine, Deco paint, Lamination) and high-end carpentry in Delhi NCR.
+
+These are our already published blog articles:
+${titlesList}
+
+Generate exactly 2 fresh, unique, and highly searched blog article topics. 
+They must NOT overlap or be similar to the existing titles listed above.
+They must target homeowners in Delhi, Noida, Gurgaon, and Faridabad looking for home interior polish and carpentry.
+
+Return ONLY a valid JSON array of exactly 2 objects. Do NOT use markdown code block formatting (like \`\`\`json). The response must be directly parseable JSON.
+
+These are golden examples of perfect lengths to follow:
+Example 1:
+- "title": "Best PU Polish for Wooden Doors in Delhi NCR" (44 characters - Perfect!)
+- "description": "Looking for the best PU polish for your wooden doors? Discover the ultimate guide to luxury wood polishing services in Delhi NCR by Wood Glazer." (147 characters - Perfect!)
+
+Example 2:
+- "title": "10 Essential Tips to Clean Melamine Coated Wood" (47 characters - Perfect!)
+- "description": "Keep your melamine wood looking brand new with our 10 essential cleaning tips. Protect your luxury furniture with professional advice from Wood Glazer." (152 characters - Perfect!)
+
+Each object must have exactly these keys:
+- "title": A catchy, highly clickable, SEO-friendly headline. It MUST be strictly between 40 and 60 characters in length (including spaces). Do NOT make it shorter than 40 or longer than 60 characters.
+- "category": Choose from "Wood Polishing", "Carpentry", "Interior Design", "Lifestyle".
+- "reason": A short 1-sentence explanation of why this topic is highly searched and valuable.
+- "seoScore": A score string like "High (9.5/10)" or "Very High (9.8/10)".
+- "description": A highly compelling, SEO-rich Meta Description. It MUST be strictly between 120 and 160 characters in length (including spaces). Do NOT make it shorter than 120 or longer than 160 characters.`;
+
+  const result = await generateAIContent(prompt, true);
+  if (!result.success || !result.text) {
+    return { success: false, error: result.error || "No response from AI" };
+  }
+
+  try {
+    const rawText = result.text.trim();
+    // Safely parse JSON even if LLM wraps it in backticks
+    const cleanJson = rawText.replace(/^```json\s*/i, "").replace(/```$/, "").trim();
+    const suggestions = JSON.parse(cleanJson);
+    return { success: true, suggestions };
+  } catch (err: unknown) {
+    console.error("JSON Parsing Error of suggestions:", result.text, err);
+    return { success: false, error: "Failed to parse AI output. Please try again." };
   }
 }
 

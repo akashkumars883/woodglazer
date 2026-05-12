@@ -45,6 +45,27 @@ export default function EditBlogPostPage() {
   const [author, setAuthor] = useState("Wood Glazer Admin");
   const [readTime, setReadTime] = useState("5 min read");
 
+  const calculateSeoScore = () => {
+    let score = 30;
+    if (title.length >= 40 && title.length <= 60) score += 20;
+    else if (title.length > 0) score += 10;
+
+    if (description.length >= 120 && description.length <= 160) score += 20;
+    else if (description.length > 0) score += 10;
+
+    if (slug && !/\s/.test(slug)) score += 15;
+    if (imageUrl) score += 15;
+    
+    // Simple content word count check
+    const wordCount = content.replace(/<[^>]+>/g, '').trim().split(/\s+/).filter(Boolean).length;
+    if (wordCount >= 1000) score += 15;
+    else if (wordCount > 100) score += 5;
+
+    return score;
+  };
+  
+  const seoScore = calculateSeoScore();
+
   const fetchPost = useCallback(async () => {
     setLoading(true);
     const { data, error } = await supabase
@@ -209,12 +230,31 @@ export default function EditBlogPostPage() {
               <div className="bg-white p-8 rounded-2xl border border-stone-200 shadow-sm space-y-4">
                  <div className="flex items-center justify-between flex-wrap gap-2">
                     <label className="text-sm font-bold text-stone-400 uppercase tracking-wider">Short Description</label>
-                    <AIAssistButton 
-                       label="AI Generate Description"
-                       loadingText="Writing meta description..."
-                       prompt={`Write a short, professional, and SEO-optimized meta description (under 160 characters) based on the title: "${title}". Make it catchy and engaging for search engines.`}
-                       onSuccess={(seoDesc) => setDescription(seoDesc)}
-                    />
+                     <AIAssistButton 
+                        label="AI Generate Description"
+                        loadingText="Writing meta description..."
+                        prompt={`Write a compelling, professional, and SEO-optimized search meta description based on the title: "${title}". It MUST be strictly between 120 and 160 characters in length (including spaces). This is a rigid limit. Do NOT make it shorter than 120 or longer than 160 characters. Do not wrap the response in quotation marks.`}
+                        onSuccess={(seoDesc) => {
+                           let desc = seoDesc.trim();
+                           if (desc.startsWith('"') && desc.endsWith('"')) {
+                              desc = desc.substring(1, desc.length - 1);
+                           }
+                           if (desc.length > 160) {
+                              desc = desc.substring(0, 157);
+                              const lastSpace = desc.lastIndexOf(" ");
+                              if (lastSpace > 110) desc = desc.substring(0, lastSpace) + "...";
+                              else desc = desc.substring(0, 157) + "...";
+                           } else if (desc.length < 120) {
+                              const suffix = " Wood Glazer provides Delhi NCR with premium wood polishing, melamine coating & customized carpentry designs.";
+                              if (desc.length + suffix.length <= 160) {
+                                 desc += suffix;
+                              } else {
+                                 desc = "Get premium PU polish, Melamine, Deco paint and high-end luxury carpentry services in Delhi NCR. Transform your home interior with Wood Glazer today.";
+                              }
+                           }
+                           setDescription(desc);
+                        }}
+                     />
                  </div>
                  <textarea 
                    placeholder="Briefly describe what this post is about..."
@@ -235,7 +275,14 @@ export default function EditBlogPostPage() {
                        <AIAssistButton 
                           label="AI Generate Article"
                           loadingText="AI is writing article..."
-                          prompt={`Write a highly engaging, professional, and search-optimized article outline and body content in professional English for a blog post titled "${title}". Focus on high-end luxury wood finishes, wood care, carpentry, or home styling. Format it with clean HTML elements like <h2>, <h3>, <p>, and <ul>. Make it around 400-600 words long, highly detailed and ready for publication.`}
+                          prompt={`Write a masterfully crafted, 1000-1200 words long, deeply detailed and search-optimized article in natural, conversational, professional human English for a blog post titled "${title}". 
+
+Follow these professional guidelines:
+1. SEO Optimization: Ensure keywords related to the title are integrated naturally throughout. Include rich subheadings (H2, H3), lists, and step-by-step guides.
+2. Google Helpful Content: Align with E-E-A-T guidelines. Share real industry expertise on luxury wood finishes, polishing (PU, Melamine, Deco paint), carpentry, and wood care.
+3. Word Count: Must be a long-form article of 1000 to 1200 words. Do NOT summarize or shorten.
+4. Human Language: Avoid robotic or cliché AI transitions and buzzwords (e.g. no "delve", "testament", "revolutionary", "moreover", "in conclusion"). 
+5. Formatting: Return ONLY pure, clean raw HTML elements (<h2>, <h3>, <p>, <ul>, <li>, <strong>).`}
                           onSuccess={(generatedHTML) => setContent(generatedHTML)}
                        />
                     )}
@@ -302,21 +349,115 @@ export default function EditBlogPostPage() {
                  </div>
               </div>
 
-              <div className="bg-stone-50 p-6 rounded-2xl border border-stone-200 space-y-4">
-                 <div className="flex items-center gap-3 text-primary">
-                    <Sparkles className="w-5 h-5" />
-                    <h3 className="font-bold text-sm">SEO Audit</h3>
-                 </div>
-                 <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                       <span className="text-[10px] font-bold text-stone-400 uppercase">Slug Health</span>
-                       <span className="text-[10px] font-bold text-green-500 uppercase">Synced</span>
-                    </div>
-                    <div className="w-full bg-stone-200 h-1 rounded-full overflow-hidden">
-                       <div className="bg-green-500 h-full w-full" />
-                    </div>
-                 </div>
-              </div>
+               {/* Premium Google Search Snippet Simulator */}
+               <div className="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm space-y-6">
+                  <div className="flex items-center justify-between border-b border-stone-100 pb-4">
+                     <h3 className="font-bold text-secondary flex items-center gap-2 text-sm">
+                        <Sparkles className="w-4 h-4 text-primary animate-pulse" />
+                        Google Snippet & Schema Planner
+                     </h3>
+                     <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${
+                        seoScore >= 80 ? "bg-green-50 text-green-600 border border-green-200" :
+                        seoScore >= 50 ? "bg-orange-50 text-orange-600 border border-orange-200" :
+                        "bg-red-50 text-red-600 border border-red-200"
+                     }`}>
+                        SEO Score: {seoScore}/100
+                     </span>
+                  </div>
+
+                  {/* Google Snippet Live Preview */}
+                  <div className="space-y-2">
+                     <label className="text-[10px] font-bold text-stone-400 uppercase tracking-wider">Google Desktop Search Preview</label>
+                     <div className="bg-stone-50 border border-stone-100 p-5 rounded-2xl space-y-1">
+                        <div className="text-xs text-stone-400 font-medium line-clamp-1 flex items-center gap-1">
+                           <span>woodglazer.com</span>
+                           <span>›</span>
+                           <span>blog</span>
+                           <span>›</span>
+                           <span className="text-stone-500 font-bold">{slug || "your-slug"}</span>
+                        </div>
+                        <h4 className="text-xl font-medium text-blue-800 hover:underline cursor-pointer leading-tight line-clamp-1">
+                           {title || "Untitled Blog Post"} | Wood Glazer
+                        </h4>
+                        <p className="text-xs text-stone-600 leading-normal line-clamp-2">
+                           {description || "Please add a description to preview how this page will appear in Google search results."}
+                        </p>
+                     </div>
+                  </div>
+
+                  {/* SEO Health Bars */}
+                  <div className="space-y-3 pt-2">
+                     <div className="space-y-1">
+                        <div className="flex justify-between text-xs font-bold text-stone-500">
+                           <span>Title Length ({title.length} chars)</span>
+                           <span className={title.length >= 40 && title.length <= 60 ? "text-green-600" : "text-orange-500"}>
+                              {title.length >= 40 && title.length <= 60 ? "Perfect" : "Should be 40-60 chars"}
+                           </span>
+                        </div>
+                        <div className="w-full bg-stone-100 h-1.5 rounded-full overflow-hidden">
+                           <div className={`h-full transition-all duration-300 ${
+                              title.length >= 40 && title.length <= 60 ? "bg-green-500" : "bg-orange-400"
+                           }`} style={{ width: `${Math.min(100, (title.length / 60) * 100)}%` }} />
+                        </div>
+                     </div>
+
+                     <div className="space-y-1">
+                        <div className="flex justify-between text-xs font-bold text-stone-500">
+                           <span>Meta Description ({description.length} chars)</span>
+                           <span className={description.length >= 120 && description.length <= 160 ? "text-green-600" : "text-orange-500"}>
+                              {description.length >= 120 && description.length <= 160 ? "Perfect" : "Should be 120-160 chars"}
+                           </span>
+                        </div>
+                        <div className="w-full bg-stone-100 h-1.5 rounded-full overflow-hidden">
+                           <div className={`h-full transition-all duration-300 ${
+                              description.length >= 120 && description.length <= 160 ? "bg-green-500" : "bg-orange-400"
+                           }`} style={{ width: `${Math.min(100, (description.length / 160) * 100)}%` }} />
+                        </div>
+                     </div>
+                  </div>
+
+                  {/* Rich Snippet Schema Visualizer */}
+                  <div className="space-y-2 pt-2">
+                     <div className="flex items-center justify-between">
+                        <label className="text-[10px] font-bold text-stone-400 uppercase tracking-wider flex items-center gap-1.5">
+                           <span>JSON-LD Schema Markup</span>
+                           <span className="bg-green-50 text-green-600 px-1.5 py-0.5 rounded text-[8px] font-bold uppercase tracking-normal">Auto-Generated</span>
+                        </label>
+                        <span className="text-[10px] text-stone-400 font-bold">BlogPosting + Breadcrumb</span>
+                     </div>
+                     <div className="bg-stone-900 text-stone-300 p-4 rounded-xl text-[10px] font-mono overflow-x-auto max-h-[150px] overflow-y-auto border border-stone-800">
+                        <pre>{JSON.stringify({
+                          "@context": "https://schema.org",
+                          "@graph": [
+                            {
+                              "@type": "BlogPosting",
+                              "headline": title || "Untitled Blog",
+                              "description": description || "",
+                              "image": imageUrl || "https://woodglazer.com/fallback.jpg",
+                              "datePublished": new Date().toISOString().split('T')[0],
+                              "author": {
+                                "@type": "Person",
+                                "name": author
+                              },
+                              "publisher": {
+                                "@type": "Organization",
+                                "name": "Wood Glazer",
+                                "logo": "https://woodglazer.com/logo.png"
+                              }
+                            },
+                            {
+                              "@type": "BreadcrumbList",
+                              "itemListElement": [
+                                { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://woodglazer.com" },
+                                { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://woodglazer.com/blog" },
+                                { "@type": "ListItem", "position": 3, "name": title || "Blog Post", "item": `https://woodglazer.com/blog/${slug || ""}` }
+                              ]
+                            }
+                          ]
+                        }, null, 2)}</pre>
+                     </div>
+                  </div>
+               </div>
            </div>
         </div>
       </form>

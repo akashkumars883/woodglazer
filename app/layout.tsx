@@ -8,6 +8,7 @@ import SiteLayoutWrapper from "@/components/SiteLayoutWrapper";
 import { Toaster } from "sonner";
 import Script from "next/script";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import CookieBanner from "@/components/CookieBanner";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -119,6 +120,7 @@ export default function RootLayout({
         />
         <Toaster position="top-right" richColors closeButton />
         <WhatsAppButton />
+        <CookieBanner />
         <SiteLayoutWrapper>
           {children}
         </SiteLayoutWrapper>

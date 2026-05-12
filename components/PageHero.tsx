@@ -35,7 +35,7 @@ export default function PageHero({
         <FadeInStagger>
           {subtitle && (
             <FadeIn>
-              <p className="text-sm font-black uppercase tracking-[0.4em] text-primary mb-4">
+              <p className="text-sm font-semibold uppercase tracking-[0.4em] text-primary mb-4">
                 {subtitle}
               </p>
             </FadeIn>

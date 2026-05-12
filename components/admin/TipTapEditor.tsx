@@ -1,6 +1,7 @@
 "use client";
 
 import { useEditor, EditorContent, Editor } from "@tiptap/react";
+import { useEffect } from "react";
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import Underline from "@tiptap/extension-underline";
@@ -173,6 +174,13 @@ export default function TipTapEditor({
        }
     }
   });
+
+  // Sync content prop when changed dynamically from parent
+  useEffect(() => {
+    if (editor && content !== editor.getHTML()) {
+      editor.commands.setContent(content);
+    }
+  }, [content, editor]);
 
   return (
     <div className="border border-stone-200 rounded-xl bg-white shadow-sm overflow-hidden flex flex-col h-[650px] transition-all hover:border-stone-300">

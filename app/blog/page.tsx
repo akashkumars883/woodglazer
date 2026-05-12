@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { supabase } from "@/lib/supabase";
 import Image from "next/image";
 import Link from "next/link";
@@ -60,7 +62,7 @@ export default async function BlogPage() {
 
       <PageHero
         title="Insights & Updates"
-        backgroundImage="https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?auto=format&fit=crop&q=80"
+        backgroundImage="/images/blog-hero.png"
       />
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-16 sm:pt-24">

@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import FAQ from "@/components/FAQ";
 import { Hero } from "@/components/Hero";
 import GetInTouch from "@/components/GetInTouch";

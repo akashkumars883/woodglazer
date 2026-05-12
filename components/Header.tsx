@@ -108,27 +108,30 @@ export function Header() {
             aria-label="Primary navigation"
             className="hidden items-center gap-2 lg:flex"
           >
-            {navigationItems.slice(0, 2).map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                className={`rounded-full px-4 py-2 text-sm font-medium transition-colors duration-200 ${
-                  isLinkActive(item.href)
-                    ? "bg-primary/5 text-primary"
-                    : "text-foreground/80 hover:text-secondary"
-                }`}
-              >
-                {item.label}
-              </Link>
-            ))}
+            {navigationItems.slice(0, 2).map((item) => {
+              const active = isLinkActive(item.href);
+              return (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  className={`relative px-4 py-2 text-sm font-semibold transition-colors duration-350 after:absolute after:bottom-0 after:left-4 after:right-4 after:h-[2px] after:origin-left after:bg-primary after:transition-transform after:duration-300 ${
+                    active
+                      ? "text-primary after:scale-x-100"
+                      : "text-foreground/80 hover:text-primary after:scale-x-0 hover:after:scale-x-100"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
 
             <div className="group relative">
               <button
                 type="button"
-                className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors duration-200 ${
+                className={`relative inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold transition-colors duration-350 after:absolute after:bottom-0 after:left-4 after:right-4 after:h-[2px] after:origin-left after:bg-primary after:transition-transform after:duration-300 ${
                   pathname.startsWith("/services")
-                    ? "bg-primary/5 text-primary"
-                    : "text-foreground/80 hover:text-secondary"
+                    ? "text-primary after:scale-x-100"
+                    : "text-foreground/80 hover:text-primary after:scale-x-0 hover:after:scale-x-100"
                 }`}
                 aria-haspopup="true"
               >
@@ -154,19 +157,22 @@ export function Header() {
               </div>
             </div>
 
-            {navigationItems.slice(2).map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                className={`rounded-full px-4 py-2 text-sm font-medium transition-colors duration-200 ${
-                  isLinkActive(item.href)
-                    ? "bg-primary/5 text-primary"
-                    : "text-foreground/80 hover:text-secondary"
-                }`}
-              >
-                {item.label}
-              </Link>
-            ))}
+            {navigationItems.slice(2).map((item) => {
+              const active = isLinkActive(item.href);
+              return (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  className={`relative px-4 py-2 text-sm font-semibold transition-colors duration-350 after:absolute after:bottom-0 after:left-4 after:right-4 after:h-[2px] after:origin-left after:bg-primary after:transition-transform after:duration-300 ${
+                    active
+                      ? "text-primary after:scale-x-100"
+                      : "text-foreground/80 hover:text-primary after:scale-x-0 hover:after:scale-x-100"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
           </nav>
 
           <div className="flex flex-1 items-center justify-end gap-2 sm:gap-3">

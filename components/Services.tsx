@@ -76,7 +76,7 @@ export default function Services() {
     return (
       <div className="py-20 flex flex-col items-center justify-center gap-4">
         <Loader2 className="w-8 h-8 text-primary animate-spin" />
-        <p className="text-stone-400 font-bold uppercase tracking-widest text-[10px]">Loading Expert Services...</p>
+        <p className="text-stone-400 font-semibold uppercase tracking-widest text-[10px]">Loading Expert Services...</p>
       </div>
     );
   }
@@ -110,7 +110,7 @@ export default function Services() {
 
                   <Link
                     href={`/services/${service.slug}`}
-                    className="inline-flex items-center justify-center rounded-xl bg-secondary px-6 py-3 text-sm font-bold text-white transition-all duration-300 hover:bg-primary hover:shadow-lg hover:-translate-y-1 sm:shrink-0"
+                    className="inline-flex items-center justify-center rounded-xl bg-secondary px-6 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-primary hover:shadow-lg hover:-translate-y-1 sm:shrink-0"
                   >
                     Explore Category
                   </Link>

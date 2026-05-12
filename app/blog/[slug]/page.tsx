@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { buildMetadata, createBlogNode, createBreadcrumbNode } from "@/lib/seo";
 import { StructuredData } from "@/components/StructuredData";
 import Image from "next/image";

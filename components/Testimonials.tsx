@@ -77,7 +77,7 @@ export default function Testimonials() {
                 </div>
                 
                 <div className="mt-8 pt-6 border-t border-stone-100 flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-stone-100 flex items-center justify-center text-secondary font-bold text-lg">
+                  <div className="w-12 h-12 rounded-full bg-stone-100 flex items-center justify-center text-secondary font-semibold text-lg">
                     {item.name[0]}
                   </div>
                   <div>

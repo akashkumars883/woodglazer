@@ -7,12 +7,14 @@ import {
   Edit2, 
   Trash2,
   Image as ImageIcon,
-  Loader2
+  Loader2,
+  Sparkles,
+  ArrowRight
 } from "lucide-react";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { deleteBlogPost } from "../actions";
+import { deleteBlogPost, suggestNewBlogTopics } from "../actions";
 import { supabase } from "@/lib/supabase";
 
 interface BlogPost {
@@ -47,6 +49,97 @@ export default function BlogAdminPage() {
     return () => { isMounted = false; };
   }, []);
 
+  const [suggestions, setSuggestions] = useState<{ title: string; category: string; reason: string; seoScore: string; description?: string }[]>([]);
+  const [loadingSuggestions, setLoadingSuggestions] = useState(false);
+
+  const handleGetSuggestions = async () => {
+    setLoadingSuggestions(true);
+    try {
+      const existingTitles = blogs.map(b => b.title);
+      const result = await suggestNewBlogTopics(existingTitles);
+      if (result.success && result.suggestions) {
+        // Enforce 100% compliant boundaries programmatically (Safe-fail Fallback)
+        const validated = result.suggestions.map((item: any) => {
+          let title = (item.title || "").trim();
+          let description = (item.description || "").trim();
+
+          // 1. Title formatting (strictly 40-60 chars)
+          if (title.length > 60) {
+            title = title.substring(0, 57);
+            const lastSpace = title.lastIndexOf(" ");
+            if (lastSpace > 15) title = title.substring(0, lastSpace);
+          } else if (title.length < 40) {
+            const paddings = [
+              " | Best Wood Polish Delhi",
+              " | PU Polish Services Delhi",
+              " | Luxury Carpentry Delhi NCR",
+              " | Wood Glazer Delhi"
+            ];
+            for (const pad of paddings) {
+              if (title.length + pad.length >= 40 && title.length + pad.length <= 60) {
+                title += pad;
+                break;
+              }
+            }
+            if (title.length < 40) {
+              title += " | Best Wood Polish Delhi";
+            }
+          }
+
+          // 2. Description formatting (strictly 120-160 chars)
+          // Ensure we start with a clean string or fallback
+          if (!description) {
+            description = "Get premium PU polish, Melamine, Deco paint and high-end luxury carpentry services in Delhi NCR. Transform your home interior with Wood Glazer today.";
+          }
+
+          // If too short, append premium snippets until it reaches at least 120 chars
+          if (description.length < 120) {
+            const descriptionPaddings = [
+              "Contact Wood Glazer in Delhi NCR for high-end luxury wood polish and premium carpentry.",
+              "Transform your home interior with professional melamine & PU wood polish services today.",
+              "Discover premium furniture designs and luxury custom carpentry work from our Delhi experts."
+            ];
+            for (const pad of descriptionPaddings) {
+              if (description.length + pad.length + 1 <= 160) {
+                description = description + " " + pad;
+              }
+              if (description.length >= 120) {
+                break;
+              }
+            }
+          }
+
+          // If still too short or somehow too long, enforce strict clipping
+          if (description.length > 160) {
+            description = description.substring(0, 157);
+            const lastSpace = description.lastIndexOf(" ");
+            if (lastSpace > 110) {
+              description = description.substring(0, lastSpace) + "...";
+            } else {
+              description = description.substring(0, 157) + "...";
+            }
+          } else if (description.length < 120) {
+            // Absolute fallback that is exactly 144 characters (Perfect SEO length!)
+            description = "Get premium PU polish, Melamine, Deco paint and high-end luxury carpentry services in Delhi NCR. Transform your home interior with Wood Glazer.";
+          }
+
+          return {
+            ...item,
+            title,
+            description
+          };
+        });
+        setSuggestions(validated);
+      } else {
+        alert("Error getting suggestions: " + (result.error || "Please check your AI config"));
+      }
+    } catch (e: unknown) {
+      alert("Error: " + (e instanceof Error ? e.message : String(e)));
+    } finally {
+      setLoadingSuggestions(false);
+    }
+  };
+
   const handleDelete = async (id: string, title: string) => {
     if (window.confirm(`Are you sure you want to delete "${title}"? This action cannot be undone.`)) {
       const result = await deleteBlogPost(id);
@@ -72,6 +165,59 @@ export default function BlogAdminPage() {
            <Plus className="w-5 h-5" />
            Write New Post
         </Link>
+      </div>
+
+      {/* AI Daily Topic Recommendations Card */}
+      <div className="bg-gradient-to-r from-stone-900 to-stone-950 text-white rounded-3xl border border-stone-800 p-8 relative overflow-hidden shadow-xl shadow-stone-950/20">
+        <div className="absolute right-0 top-0 w-80 h-80 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
+        
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
+          <div className="space-y-2 max-w-2xl">
+             <div className="inline-flex items-center gap-2 bg-primary/20 border border-primary/30 text-primary px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
+                <Sparkles className="w-3.5 h-3.5 animate-pulse" />
+                AI Smart Planner
+             </div>
+             <h2 className="text-2xl font-bold tracking-tight">Need a fresh topic? Get daily suggestions!</h2>
+             <p className="text-stone-300 text-sm leading-relaxed">
+                Our AI analyzes your active blogs, matches them with Google trending keywords, and suggests brand-new topics for Wood Glazer that you haven't published yet.
+             </p>
+          </div>
+          <button 
+             onClick={handleGetSuggestions}
+             disabled={loadingSuggestions}
+             className="inline-flex items-center gap-2 px-6 py-4 bg-primary text-white rounded-xl font-bold hover:scale-105 transition-transform shadow-lg shadow-primary/30 self-start md:self-center disabled:opacity-50 disabled:hover:scale-100 whitespace-nowrap"
+          >
+             {loadingSuggestions ? <Loader2 className="w-5 h-5 animate-spin" /> : <Sparkles className="w-5 h-5" />}
+             {loadingSuggestions ? "Analyzing Blogs..." : "Suggest Fresh Topics"}
+          </button>
+        </div>
+
+        {suggestions.length > 0 && (
+           <div className="mt-8 border-t border-stone-800 pt-6 space-y-4 animate-in fade-in duration-300">
+              <p className="text-xs font-bold text-stone-400 uppercase tracking-widest">Recommended Topics to write next:</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                 {suggestions.map((item, idx) => (
+                    <div key={idx} className="bg-stone-900/50 border border-stone-800 rounded-2xl p-5 hover:border-primary/40 transition-all flex flex-col justify-between gap-4">
+                       <div>
+                          <div className="flex items-center justify-between">
+                             <span className="text-[10px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded uppercase">{item.category}</span>
+                             <span className="text-[10px] text-stone-400 font-semibold">{item.seoScore} SEO Potential</span>
+                          </div>
+                          <h4 className="font-bold text-white text-base mt-2 leading-snug">{item.title}</h4>
+                          <p className="text-stone-300 text-xs mt-1 leading-relaxed">{item.reason}</p>
+                       </div>
+                       <Link 
+                          href={`/admin/blog/new?suggestedTitle=${encodeURIComponent(item.title)}&suggestedCategory=${encodeURIComponent(item.category)}&suggestedDescription=${encodeURIComponent(item.description || '')}`}
+                          className="inline-flex items-center justify-center gap-1.5 py-2.5 bg-stone-800 hover:bg-stone-700 hover:text-primary text-white rounded-xl text-xs font-bold transition-all mt-2"
+                       >
+                          Write This Blog
+                          <ArrowRight className="w-3.5 h-3.5 text-primary" />
+                       </Link>
+                    </div>
+                 ))}
+              </div>
+           </div>
+        )}
       </div>
 
       {/* Filter & Search Bar */}

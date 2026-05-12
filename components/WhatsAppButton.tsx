@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 export default function WhatsAppButton() {
   const [visible, setVisible] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     // Show button after 1.5 seconds of mounting for a smooth slide-in entry
@@ -13,6 +15,11 @@ export default function WhatsAppButton() {
 
     return () => clearTimeout(timer);
   }, []);
+
+  // Conditionally hide WhatsApp button on any Admin pages
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
 
   const phoneNumber = "919717048359";
   const defaultMessage = encodeURIComponent(
